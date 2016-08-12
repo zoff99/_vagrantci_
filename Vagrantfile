@@ -14,13 +14,11 @@ Vagrant.configure("2") do |config|
   # Shared folders
   config.vm.synced_folder ".", "/srv"
   config.vm.synced_folder "www/", "/www_srv", create: true
-  config.vm.post_up_message "--- VM up ---"
 
   # Setup
   config.vm.provision :shell, :inline => "touch .hushlogin"
-  config.vm.provision :shell, :inline => "hostnamectl set-hostname #{hostname} && locale-gen #{locale}"
 
   # configure the machine
-  config.vm.provision :shell, path: "/bin/bash tools/bootstrap.sh"
+  config.vm.provision :shell, path: "tools/bootstrap.sh"
 
 end
