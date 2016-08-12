@@ -10,7 +10,7 @@ Vagrant.configure("2") do |config|
   locale = "en_GB.UTF-8"
 
   # Shared folders
-  # config.vm.synced_folder ".", "/srv"
+  config.vm.synced_folder ".", "/srv"
 
   # circleCI specific ---
   config.vm.provision :shell, :inline =>  "groupadd -g 1000 ubuntu"
