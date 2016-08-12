@@ -10,10 +10,11 @@ echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 chown ubuntu:ubuntu /home/ubuntu
 
 apt-get update --fix-missing
-apt-get install -q -y g++ make git curl vim htop bc mc wget
 
-# install packages
+apt-get install -q -y g++ make git curl vim htop bc mc
+apt-get install -q -y wget unzip
 cat /srv/tools/circle_pkgs.txt | xargs -L10 apt-get install
+
 
 apt-get install -y apache2
 
@@ -22,19 +23,15 @@ if ! [ -L /var/www ]; then
   ln -fs /www_srv /var/www
 fi
 
+
 # SDK
-if [ ! -e /srv/dl/sdk_24.4.1.tgz ]; then
-  wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /srv/dl/sdk_24.4.1.tgz
-fi
+wget --continue "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /srv/dl/sdk_24.4.1.tgz
 
 # NDK
-if [ ! -e srv/dl/ndk_12b.zip ]; then
-  wget "http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip" -O /srv/dl/ndk_12b.zip
-fi
+wget --continue "http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip" -O /srv/dl/ndk_12b.zip
 
 mkdir -p /usr/local/
 cd /usr/local/ && unzip /srv/dl/ndk_12b.zip
 
 mkdir -p /usr/local/
 cd /usr/local/ && tar -xzvf /srv/dl/sdk_24.4.1.tgz
-
