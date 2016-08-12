@@ -17,7 +17,7 @@ apt-get install -y apache2
 
 if ! [ -L /var/www ]; then
   rm -rf /var/www
-  ln -fs /vagrant /var/www
+  ln -fs /www_srv /var/www
 fi
 
 echo "...ready"
