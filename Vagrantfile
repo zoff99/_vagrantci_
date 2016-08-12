@@ -11,6 +11,7 @@ Vagrant.configure("2") do |config|
 
   # Shared folders
   config.vm.synced_folder ".", "/srv"
+  config.vm.synced_folder "www/", "/www_srv", create: true
 
   # Setup
   config.vm.provision :shell, :inline => "touch .hushlogin"
