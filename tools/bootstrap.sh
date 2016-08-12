@@ -13,8 +13,8 @@ apt-get update --fix-missing
 apt-get install -q -y g++ make git curl vim htop bc
 
 # install packages
-cat tools/circle_pkgs.txt
-cat tools/circle_pkgs.txt | xargs -L10 apt-get install
+cat /srv/tools/circle_pkgs.txt
+cat /srv/tools/circle_pkgs.txt | xargs -L10 apt-get install
 
 apt-get install -y apache2
 
