@@ -22,8 +22,6 @@ if ! [ -L /var/www ]; then
   ln -fs /www_srv /var/www
 fi
 
-mkdir /d/
-
 # SDK
 if [ ! -e /srv/dl/sdk_24.4.1.tgz ]; then
   wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /srv/dl/sdk_24.4.1.tgz
@@ -39,3 +37,4 @@ cd /usr/local/ && unzip /srv/dl/ndk_12b.zip
 
 mkdir -p /usr/local/
 cd /usr/local/ && tar -xzvf /srv/dl/sdk_24.4.1.tgz
+
