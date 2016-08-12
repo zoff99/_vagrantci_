@@ -25,5 +25,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision :shell, :inline => "apt-get update --fix-missing"
   config.vm.provision :shell, :inline => "apt-get install -q -y g++ make git curl vim htop bc"
 
+  #
+  config.vm.provision :shell, path: "tools/bootstrap.sh"
 
 end
