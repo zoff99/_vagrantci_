@@ -10,7 +10,7 @@ echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
 chown ubuntu:ubuntu /home/ubuntu
 
 apt-get update --fix-missing
-apt-get install -q -y g++ make git curl vim htop bc
+apt-get install -q -y g++ make git curl vim htop bc mc wget
 
 # install packages
 cat /srv/tools/circle_pkgs.txt
