@@ -12,6 +12,8 @@ chown ubuntu:ubuntu /home/ubuntu"
 apt-get update --fix-missing"
 apt-get install -q -y g++ make git curl vim htop bc"
 
+# install packages
+cat tools/circle_pkgs.txt | xargs -L10 apt-get install
 
 apt-get install -y apache2
 
