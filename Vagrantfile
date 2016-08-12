@@ -13,8 +13,8 @@ Vagrant.configure("2") do |config|
   # config.vm.synced_folder ".", "/srv"
 
   # circleCI specific ---
-  config.vm.provision :shell, :inline =>  "groupadd -g 8888 ubuntu"
-  config.vm.provision :shell, :inline =>  "useradd -m -u 7777 -g 8888 -s /bin/bash -d /home/ubuntu ubuntu"
+  config.vm.provision :shell, :inline =>  "groupadd -g 1000 ubuntu"
+  config.vm.provision :shell, :inline =>  "useradd -m -u 1000 -g 1000 -s /bin/bash -d /home/ubuntu ubuntu"
   config.vm.provision :shell, :inline =>  "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
   config.vm.provision :shell, :inline =>  "chown ubuntu:ubuntu /home/ubuntu"
   # circleCI specific ---
