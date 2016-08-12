@@ -26,11 +26,13 @@ fi
 mkdir /d/
 
 # SDK
-wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /d/sdk_24.4.1.zip
-
+wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /d/sdk_24.4.1.tgz
 
 # NDK
 wget "http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip" -O /d/ndk_12b.zip
 
+mkdir -p /usr/local/android-sdk-linux
+cd /usr/local/android-sdk-linux && unzip /d/ndk_12b.zip
 
-echo "...ready"
+mkdir -p /usr/local/android-sdk-linux/ndk
+cd /usr/local/android-sdk-linux/ndk && tar -xzvf /d/sdk_24.4.1.tgz
