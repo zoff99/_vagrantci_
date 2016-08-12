@@ -13,7 +13,6 @@ apt-get update --fix-missing
 apt-get install -q -y g++ make git curl vim htop bc mc wget
 
 # install packages
-cat /srv/tools/circle_pkgs.txt
 cat /srv/tools/circle_pkgs.txt | xargs -L10 apt-get install
 
 apt-get install -y apache2
@@ -26,13 +25,17 @@ fi
 mkdir /d/
 
 # SDK
-wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /d/sdk_24.4.1.tgz
+if [ ! -e /srv/dl/sdk_24.4.1.tgz ]; then
+  wget "https://dl.google.com/android/android-sdk_r24.4.1-linux.tgz" -O /srv/dl/sdk_24.4.1.tgz
+fi
 
 # NDK
-wget "http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip" -O /d/ndk_12b.zip
+if [ ! -e srv/dl/ndk_12b.zip ]; then
+  wget "http://dl.google.com/android/repository/android-ndk-r12b-linux-x86_64.zip" -O /srv/dl/ndk_12b.zip
+fi
 
-mkdir -p /usr/local/android-sdk-linux
-cd /usr/local/android-sdk-linux && unzip /d/ndk_12b.zip
+mkdir -p /usr/local/
+cd /usr/local/ && unzip /srv/dl/ndk_12b.zip
 
-mkdir -p /usr/local/android-sdk-linux/ndk
-cd /usr/local/android-sdk-linux/ndk && tar -xzvf /d/sdk_24.4.1.tgz
+mkdir -p /usr/local/
+cd /usr/local/ && tar -xzvf /srv/dl/sdk_24.4.1.tgz
