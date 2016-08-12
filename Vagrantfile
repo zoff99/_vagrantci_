@@ -12,6 +12,12 @@ Vagrant.configure("2") do |config|
   # Shared folders
   # config.vm.synced_folder ".", "/srv"
 
+  # circleCI specific ---
+  config.vm.provision :shell, :inline =>  "useradd -u 7777 -g 8888 -s /bin/bash -d /home/ubuntu ubuntu"
+  config.vm.provision :shell, :inline =>  "echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers"
+  config.vm.provision :shell, :inline =>  "chown ubuntu:ubuntu /home/ubuntu"
+  # circleCI specific ---
+
   # Setup
   config.vm.provision :shell, :inline => "touch .hushlogin"
   config.vm.provision :shell, :inline => "hostnamectl set-hostname #{hostname} && locale-gen #{locale}"
