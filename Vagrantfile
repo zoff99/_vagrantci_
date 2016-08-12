@@ -8,6 +8,10 @@ Vagrant.configure("2") do |config|
   config.vm.hostname = "circleci.box"
   config.vm.network :private_network, ip: "192.168.77.33"
 
+  config.vm.provider :virtualbox do |vb|
+    vb.customize ["modifyvm", :id, "--memory", "2048"]
+  end
+
   hostname = "circleci.box"
   locale = "en_GB.UTF-8"
 
