@@ -36,3 +36,4 @@ else
     echo "  $0 wait-for-boot - wait for a device to fully boot."
     echo "    (adb wait-for-device only waits for it to be ready for shell access)."
 fi
+

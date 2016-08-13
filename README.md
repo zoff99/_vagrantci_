@@ -1,1 +1,0 @@
-# circleCI Emulator with Vagrant
