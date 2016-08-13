@@ -122,7 +122,7 @@ fi
 
 export ADB_INSTALL_TIMEOUT ANDROID_HOME ANDROID_NDK CI_PULL_REQUEST CI_PULL_REQUESTS CIRCLE_ARTIFACTS CIRCLE_BRANCH
 export CIRCLE_BUILD_IMAGE CIRCLE_BUILD_NUM CIRCLE_BUILD_URL CIRCLECI CIRCLE_COMPARE_URL CIRCLE_NODE_INDEX CIRCLE_NODE_TOTAL
-export CIRCLE_PREVIOUS_BUILD_NUM CIRCLE_PROJECT_REPONAME CIRCLE_PROJECT_USERNAME CIRCLE_REPOSITORY_URL CIRCLE_SHA1 
+export CIRCLE_PREVIOUS_BUILD_NUM CIRCLE_PROJECT_REPONAME CIRCLE_PROJECT_USERNAME CIRCLE_REPOSITORY_URL CIRCLE_SHA1
 export CIRCLE_TEST_REPORTS CIRCLE_USERNAME CI_REPORTS CI
 export PATH DISPLAY
 
@@ -145,33 +145,33 @@ echo "install Android APIs..."
 
 have_apis=0
 if [ `ls -1 /srv/dl/android_apis.tar.gz 2>/dev/null`"x" != "x" ]; then
-	have_apis=1
+        have_apis=1
 fi
 
 if [ $have_apis -eq 0 ]; then
-	###################### SDK ######################
-	###################### SDK ######################
-	echo y | android update sdk --no-ui --all --filter platform-tools >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter tools >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 >> /srv/dl/install.log 2>&1
+        ###################### SDK ######################
+        ###################### SDK ######################
+        echo y | android update sdk --no-ui --all --filter platform-tools >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter tools >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 >> /srv/dl/install.log 2>&1
 
-	echo y | android update sdk --no-ui --all --filter android-10 >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter android-21 >> /srv/dl/install.log 2>&1
-	# echo y | android update sdk --no-ui --all --filter android-23 >> /srv/dl/install.log 2>&1
-	# echo y | android update sdk --no-ui --all --filter android-24 >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter android-10 >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter android-21 >> /srv/dl/install.log 2>&1
+        # echo y | android update sdk --no-ui --all --filter android-23 >> /srv/dl/install.log 2>&1
+        # echo y | android update sdk --no-ui --all --filter android-24 >> /srv/dl/install.log 2>&1
 
-	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-21 >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-21 >> /srv/dl/install.log 2>&1
 
-	echo y | android update sdk --no-ui --all --filter extra-android-support >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter extra-google-google_play_services >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter extra-google-m2repository >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter extra-android-m2repository >> /srv/dl/install.log 2>&1
-	###################### SDK ######################
-	###################### SDK ######################
+        echo y | android update sdk --no-ui --all --filter extra-android-support >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter extra-google-google_play_services >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter extra-google-m2repository >> /srv/dl/install.log 2>&1
+        echo y | android update sdk --no-ui --all --filter extra-android-m2repository >> /srv/dl/install.log 2>&1
+        ###################### SDK ######################
+        ###################### SDK ######################
 
-	cd /usr/local/ && tar -czvf /srv/dl/android_apis.tar.gz android-sdk-linux
+        cd /usr/local/ && tar -czvf /srv/dl/android_apis.tar.gz android-sdk-linux >> /srv/dl/install.log 2>&1
 else
-	cd /usr/local/ && tar -xzvf /srv/dl/android_apis.tar.gz
+        cd /usr/local/ && tar -xzvf /srv/dl/android_apis.tar.gz >> /srv/dl/install.log 2>&1
 fi
 
 cp /srv/tools/circle-android /usr/bin/circle-android >> /srv/dl/install.log 2>&1
@@ -181,6 +181,10 @@ cp /srv/tools/fb-adb /usr/bin/fb-adb >> /srv/dl/install.log 2>&1
 chmod a+rx /usr/bin/fb-adb >> /srv/dl/install.log 2>&1
 
 END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
+
+
+/bin/bash /srv/tools/repo_stats.sh >> /srv/dl/install.log 2>&1
+/bin/bash /srv/tools/repo_get.sh >> /srv/dl/install.log 2>&1
 
 
 START=$(date +%s)
