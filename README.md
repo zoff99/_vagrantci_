@@ -1,3 +1,3 @@
-# vagrantci
+# VagrantCI
 
-a poor mans CI
+a Poor Man's CI System using Vagrant and VirtualBox
