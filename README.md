@@ -39,7 +39,6 @@ cd Etar-Calendar</pre>
 - installation is now complete
 
 ### Directory Tree
-
 your directory tree should look something like this:
 <pre>
 .
@@ -67,8 +66,11 @@ bash ./vagrantci.sh run
 </pre>
 - that's it
 
-### Wiping VM and starting fresh [starting from $HOME]
+### Results of CI runs [starting from $HOME]
+all files and logs of every CI run will be saved to the
+<pre>_vagrantci_/www/</pre> directory
 
+### Wiping VM and starting fresh [starting from $HOME]
 this will take about 10 minutes loger than a normal CI run
 <pre>cd Etar-Calendar
 cd _vagrantci_
