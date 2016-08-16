@@ -1,9 +1,9 @@
 # VagrantCI
 
-a Poor Man's CI System using Vagrant and VirtualBox
 
 ### Overview
-microG GmsCore is a free and open implementation of the Google Play Services Framework.
+a Poor Man's CI System using Vagrant and VirtualBox
+
 
 ### Features
 - a CI System (almost compatible with circle CI command syntax)
