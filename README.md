@@ -12,13 +12,13 @@ VagrantCI is a [Continuous integration System](https://en.wikipedia.org/wiki/Con
 - supports only repositories hosted on github (for now)
 
 ### System Requirements
-|         |            |   |
-| ------------- | -------------:| -----:|
+| Component   |            |     |
+| ----------- | ----------:| ---:|
 | VirtualBox  | [https://www.virtualbox.org/] ||
 | Vagrant     | [https://www.vagrantup.com/] ||
 | git         | [https://en.wikipedia.org/wiki/Git_%28software%29] ||
 | circle.yml  | inside the source repository (for build commands) ||
-| diskspace   | minimum 10GByte free ||
+| Diskspace   | minimum 10GByte free ||
 | RAM         | minimum 8GByte ||
 
 ### Installation (on Ubuntu)
