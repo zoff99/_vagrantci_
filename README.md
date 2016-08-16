@@ -34,6 +34,22 @@ cd Etar-Calendar</pre>
 <pre>cd \_vagrantci\_</pre>
 - installation is now complete
 
+### Running (the first time) [starting from $HOME]
+- the first ever run will take a long time, depending on your internet connection and your system (it may take up to 1 hour):
+<pre>cd Etar-Calendar
+cd \_vagrantci\_
+bash ./vagrantci.sh run</pre>
+
+### Running (continuously) [starting from $HOME]
+- checkout your code and run it in CI:
+<pre>cd Etar-Calendar
+git pull
+git checkout &lt;new commit hash&gt;
+cd \_vagrantci\_
+bash ./vagrantci.sh run
+</pre>
+- that's it
+
 ### Contributions welcome!
 Please report bugs and include logs.
 
