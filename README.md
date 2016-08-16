@@ -38,6 +38,19 @@ cd Etar-Calendar</pre>
 <pre>cd \_vagrantci\_</pre>
 - installation is now complete
 
+### Directory Tree
+
+your directory tree should look something like this:
+<pre>
+.
+|-- .git
+|-- circle.yml
+|-- _vagrantci_
+|   |-- dl
+|   |-- tools
+|   |-- Vagrantfile
+</pre>
+
 ### Running (the first time) [starting from $HOME]
 - the first ever run will take a long time, depending on your internet connection and your system (it may take up to 1 hour):
 <pre>cd Etar-Calendar
@@ -53,6 +66,15 @@ cd \_vagrantci\_
 bash ./vagrantci.sh run
 </pre>
 - that's it
+
+### Wiping VM and starting fresh [starting from $HOME]
+
+this will take about 10 minutes loger than a normal CI run
+
+<pre>cd Etar-Calendar
+cd \_vagrantci\_
+bash ./vagrantci.sh destroy
+bash ./vagrantci.sh run</pre>
 
 ### Contributions welcome!
 Please report bugs and include logs.
