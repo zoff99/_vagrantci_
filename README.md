@@ -6,8 +6,8 @@ a Poor Man's CI System using Vagrant and VirtualBox
 
 
 ### Features
-- a CI System (almost compatible with circle CI command syntax)
-- Free and open source (Apache 2.0 licensed)
+- CI System (almost compatible with circle CI command syntax)
+- Free and open source (GPL v2 licensed)
 - supports only repositories hosted on github (for now)
 
 ### System Requirements
