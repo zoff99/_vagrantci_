@@ -67,7 +67,7 @@ bash ./vagrantci.sh run
 - that's it
 
 ### Results of CI runs [starting from $HOME]
-all files and logs of every CI run will be saved to the <p>_vagrantci_/www/</p> directory
+all files and logs of every CI run will be saved to the **\_vagrantci\_/www/** directory
 
 ### Wiping VM and starting fresh [starting from $HOME]
 this will take about 10 minutes loger than a normal CI run
