@@ -22,9 +22,17 @@ microG GmsCore is a free and open implementation of the Google Play Services Fra
 <pre>apt-get install virtualbox vagrant git</pre>
 - create a dummy user that only has access to it's own homedir
 - change to that dummy user
-- checkout the code you want to run in your CI machine:
-<pre>git clone </pre>
--
+- clone repository you want to run in your CI machine:
+<pre>git clone https://github.com/zoff99/Etar-Calendar.git
+cd Etar-Calendar</pre>
+- checkout the commit you want to run:
+<pre>git checkout 32f1508713f95b1b6188f32bfcc7f0388170ace4</pre>
+- now add VagrantCI to the mix:
+<pre>git clone https://github.com/zoff99/_vagrantci_.git</pre>
+- this will add a "\_vagrantci\_" directory
+- enter directory:
+<pre>cd \_vagrantci\_</pre>
+- installation is now complete
 
 ### Contributions welcome!
 Please report bugs and include logs.
