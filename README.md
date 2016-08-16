@@ -14,6 +14,7 @@ a Poor Man's CI System using Vagrant and VirtualBox
 - VirtualBox    [https://www.virtualbox.org/]
 - Vagrant       [https://www.vagrantup.com/]
 - git           [https://en.wikipedia.org/wiki/Git_%28software%29]
+- circle.yml inside the source repository (for build commands)
 - minimum 10GByte free diskspace
 - minimum 8GByte RAM
 
