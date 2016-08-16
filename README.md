@@ -70,9 +70,8 @@ bash ./vagrantci.sh run
 ### Wiping VM and starting fresh [starting from $HOME]
 
 this will take about 10 minutes loger than a normal CI run
-
 <pre>cd Etar-Calendar
-cd \_vagrantci\_
+cd _vagrantci_
 bash ./vagrantci.sh destroy
 bash ./vagrantci.sh run</pre>
 
