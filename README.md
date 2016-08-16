@@ -1,8 +1,9 @@
 # VagrantCI
 
+a Poor Man's CI System using Vagrant and VirtualBox
 
 ### Overview
-a Poor Man's CI System using Vagrant and VirtualBox
+VagrantCI is a [Continuous integration System](https://en.wikipedia.org/wiki/Continuous_integration) that runs locally on your machine. Virtualization is achieved with [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/).
 
 
 ### Features
@@ -11,12 +12,14 @@ a Poor Man's CI System using Vagrant and VirtualBox
 - supports only repositories hosted on github (for now)
 
 ### System Requirements
-- VirtualBox    [https://www.virtualbox.org/]
-- Vagrant       [https://www.vagrantup.com/]
-- git           [https://en.wikipedia.org/wiki/Git_%28software%29]
-- circle.yml inside the source repository (for build commands)
-- minimum 10GByte free diskspace
-- minimum 8GByte RAM
+|         |            |   |
+| ------------- | -------------:| -----:|
+| VirtualBox  | [https://www.virtualbox.org/] ||
+| Vagrant     | [https://www.vagrantup.com/] ||
+| git         | [https://en.wikipedia.org/wiki/Git_%28software%29] ||
+| circle.yml  | inside the source repository (for build commands) ||
+| diskspace   | minimum 10GByte free ||
+| RAM         | minimum 8GByte ||
 
 ### Installation (on Ubuntu)
 - install requirements:
