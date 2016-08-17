@@ -1,39 +1,92 @@
 #!/usr/bin/env bash
+#
+# VagrantCI - a Poor Man's CI System
+# Copyright (C) 2016  Zoff <zoff@zoff.cc>
+#
+# This program is free software; you can redistribute it and/or
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+#
 
-spinstr='|/-\'
-spin_index=0
+set -x
 
-spin_until () {
-    while ! $@
-    do
-        spin_index=$(expr $(expr $spin_index + 1) % 4)
-        printf "\r${spinstr:spin_index:1}"
-        sleep 0.5
-    done
-    printf "\r"
+err_file="/tmp/wait_for_avd.$$.txt"
+export err_file
+rm -f "$err_file"
+
+wait_until()
+{
+	set -x
+
+	counter=2
+	export counter
+
+	echo "+ counter=$counter"
+	echo "+ err_file=$err_file"
+
+	while ! $@
+	do
+		counter=$[ $counter + 1 ]
+
+		echo "+- counter=$counter"
+		echo "+- err_file=$err_file"
+
+		if [ $counter -gt 21 ]; then
+			touch "$err_file"
+			exit 1
+		fi
+		printf "."
+		sleep 30
+	done
 }
 
-adb_shell_getprop () {
-    adb shell getprop $1 | tr -d [:space:] # delete the whitespace
+adb_shell_getprop()
+{
+	set -x
+
+	adb shell getprop $1 \
+	| tr -d ' ' | sed -e 's#\r##'
 }
 
-device_actually_ready () {
-    # https://devmaze.wordpress.com/2011/12/12/starting-and-stopping-android-emulators/
-    [ "$(adb_shell_getprop init.svc.bootanim)" = "stopped" ]
+device_ready()
+{
+	set -x
+
+	[ "$(adb_shell_getprop init.svc.bootanim)" = "stopped" ]
 }
 
-if [ "$1" == "wait-for-boot" ]
-then
-    # wait for the device to respond to shell commands
-    spin_until adb shell true 2> /dev/null
-    # wait for the emulator to be completely finished booting.
-    # adb wait-for-device is not sufficient for this.
-    spin_until device_actually_ready
-else
-    echo "$0, a collection of tools for CI with android."
-    echo ""
-    echo "Usage:"
-    echo "  $0 wait-for-boot - wait for a device to fully boot."
-    echo "    (adb wait-for-device only waits for it to be ready for shell access)."
+if [ "$1""x" == "wait-for-boot""x" ]; then
+	wait_until adb shell true
+	res=$?
+	if [ $res -ne 0 ]; then
+		sleep 60
+	fi
+	wait_until adb shell true
+	res=$?
+	if [ $res -ne 0 ]; then
+		sleep 60
+	fi
+	wait_until adb shell true
+
+	wait_until device_ready
+	res=$?
+
+	if [ -e "$err_file" ];then
+		echo "ERROR: Android Emulator did not start within 10 minutes!"
+		rm -f "$err_file"
+		exit 1
+	else
+		exit $res
+	fi
 fi
 
