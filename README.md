@@ -68,7 +68,16 @@ bash ./vagrantci.sh run
 
 ### Results of CI runs [starting from $HOME]
 all files and logs of every CI run will be saved to the **\_vagrantci\_/www/** directory
-you can also access the results with any webbroswer on your host machine at **http://localhost:56989/**
+you can also access the results with any webbroswer on your host machine at **http://localhost:56999/**
+
+### ssh into the CI box [starting from $HOME]
+<pre>cd Etar-Calendar
+cd _vagrantci_
+vagrant ssh
+</pre>
+
+if you have multiple CI boxes running, you need to specify the box name to enter the desired box
+
 
 ### Wiping VM and starting fresh [starting from $HOME]
 this will take about 10 minutes loger than a normal CI run
