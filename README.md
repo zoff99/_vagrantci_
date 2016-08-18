@@ -52,7 +52,7 @@ your directory tree should look something like this:
 </pre>
 
 ### Running (the first time) [starting from $HOME]
-- the first ever run will take a long time, depending on your internet connection and your system (it may take up to 1 hour):
+- the first ever run will take a long time, depending on your internet connection and your system (it may take up to 15 minutes):
 <pre>cd Etar-Calendar
 cd \_vagrantci\_
 bash ./vagrantci.sh run</pre>
