@@ -231,7 +231,7 @@ rm -f "$tmpf"
 find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
 
-	if [ _must_exit_ -ne 0 ]; then
+	if [ ${_must_exit_} -ne 0 ]; then
 		exit ${_exit_code_}
 	fi
 
