@@ -83,7 +83,7 @@ html_template_cmd_head_1='<details>
 html_template_cmd_command_1='
 <p><pre>'
 
-html_template_cmd_command_2='</pre><p><br><HR><br>
+html_template_cmd_command_2='</pre><p><HR>
 '
 
 
