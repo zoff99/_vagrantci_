@@ -80,6 +80,14 @@ html_template_cmd_head_1='<details>
 <summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@</summary>
 '
 
+html_template_cmd_command_1='
+<p><pre>'
+
+html_template_cmd_command_2='</pre><p><br><HR><br>
+'
+
+
+
 html_template_cmd_log_1='<p>
 <pre>'
 
@@ -93,6 +101,11 @@ html_template_cmd_head_2='</details>
 html_template_099='</HTML>
 '
 
+html_template_output_files_1='<a href="'
+html_template_output_files_2='">'
+html_template_output_files_3='</a><BR>'
+
+
 rm -f "$CIRCLE_ARTIFACTS"/index.html
 echo "$html_template_001" >> "$CIRCLE_ARTIFACTS"/index.html
 
@@ -100,6 +113,10 @@ echo '<br><div align="center"><H2>VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #
 echo '<a href="' >> "$CIRCLE_ARTIFACTS"/index.html
 echo "$CIRCLE_REPOSITORY_URL" >> "$CIRCLE_ARTIFACTS"/index.html
 echo '">repository URL</a><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+echo '<br><br><div>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
 
 function sync_install_log_()
@@ -133,8 +150,38 @@ if [ "$bg_count""x" != "0x" ]; then
 
 		sed -f /tmp/xsed.$$.$bb_count.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.$bb_count.txt
 		cp /tmp/temp_html.$$.$bb_count.txt "$CIRCLE_ARTIFACTS"/index.html
+		rm -f "/tmp/temp_html.$$.$bb_count.txt"
+		rm -f /tmp/xsed.$$.$bb_count.txt
 	done
+
+	fname="/tmp/outputfiles.$$.tmp"
+	rm -f "$fname"
+
+
+	# collect artifacts -------------------------
+	find . -maxdepth 1|grep -v '^./index.html$'| while read output_file; do
+		echo -n "$html_template_output_files_1" >> "$fname"
+		echo -n "$output_file" >> "$fname"
+		echo -n "$html_template_output_files_2" >> "$fname"
+		echo -n "$output_file" >> "$fname"
+		echo "$html_template_output_files_3" >> "$fname"
+	done
+	# collect artifacts -------------------------
+
+	echo '/@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@/ {
+  r '"${fname}"'
+  d
+}' </dev/null >/tmp/xsed.$$.outputfiles.txt
+
+	cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
+	sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
+	cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
+
+	rm -f /tmp/xsed.$$.outputfiles.txt
+	rm -f /tmp/temp_html.$$.outputfiles.txt
 fi
+
+
 # ---- paste all bg logs into HTML file ----
 
 
@@ -142,17 +189,21 @@ fi
 
 if [ "`cat "$pids" 2>/dev/null|grep -v '^$'|wc -l`""x" != "0x" ]; then
 	echo
-	echo "-- bg jobs still running --"
+	echo "========== INFO ==========="
 	echo "-- bg jobs still running --"
 	cat "$pids" 2>/dev/null
 	echo "-- bg jobs still running --"
-	echo "-- bg jobs still running --"
-	echo
 
 	# -- first kill all childs
-	cat "$pids" | xargs -L1 pkill -9 -P
+	cat "$pids" | xargs -L1 pkill -P > /dev/null 2> /dev/null
+	cat "$pids" | xargs -L1 pkill -9 -P > /dev/null 2> /dev/null
 	# -- now kill processes itself
-	cat "$pids" | xargs -L1 pkill -9
+	cat "$pids" | xargs -L1 pkill > /dev/null 2> /dev/null
+	cat "$pids" | xargs -L1 pkill -9 > /dev/null 2> /dev/null
+
+	echo "========== INFO ==========="
+	echo
+
 fi
 # ---- kill all background jobs that are still running ----
 
@@ -197,12 +248,21 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TITLE@@#dependencies.pre ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
+		# ------- log -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- log -------
 
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
@@ -226,6 +286,15 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TIME@@#-:--:--#" \
 			| sed -e "s#@@TITLE@@#dependencies.pre ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
+
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
@@ -270,6 +339,14 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TITLE@@#test.pre ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
 		rm -f "/tmp/xyz.txt"
 		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
 
@@ -299,6 +376,15 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TIME@@#-:--:--#" \
 			| sed -e "s#@@TITLE@@#test.pre ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
+
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
@@ -341,6 +427,14 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TITLE@@#test.override ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
 		rm -f "/tmp/xyz.txt"
 		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
 
@@ -369,6 +463,15 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TIME@@#-:--:--#" \
 			| sed -e "s#@@TITLE@@#test.override ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
+
+		# ------- commands -------
+		rm -f "/tmp/xyz.txt"
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# ------- commands -------
+
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
