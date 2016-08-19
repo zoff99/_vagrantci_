@@ -217,6 +217,9 @@ echo "$html_template_099" >> "$CIRCLE_ARTIFACTS"/index.html
 
 sync_install_log_
 
+_must_exit_=0
+_exit_code_=0
+
 
 echo "dependencies/pre"
 _l="$ldir"/dependencies/pre/
@@ -227,6 +230,11 @@ tmpf="/tmp/ls.$$.tmp"
 rm -f "$tmpf"
 find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
+
+	if [ _must_exit_ -ne 0 ]; then
+		exit ${_exit_code_}
+	fi
+
 	sleep $delay_1
 	START=$(date +%s)
 	_l2="$_l"'/'"$_cmdfile"
@@ -274,6 +282,8 @@ cat "$tmpf" | while read _cmdfile; do
 			tail -10 "$_l2"
 			echo "==============="
 			clean_up
+			_must_exit_=1
+			_exit_code_=$excode
 			exit $excode
 		fi
 	else
@@ -364,6 +374,8 @@ cat "$tmpf" | while read _cmdfile; do
 			tail -10 "$_l2"
 			echo "==============="
 			clean_up
+			_must_exit_=1
+			_exit_code_=$excode
 			exit $excode
 		fi
 	else
