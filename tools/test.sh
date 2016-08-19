@@ -319,6 +319,11 @@ done
 sync_install_log_
 
 
+if [ ${_must_exit_} -ne 0 ]; then
+	exit ${_exit_code_}
+fi
+
+
 echo "test/pre"
 _l="$ldir"/test/pre/
 _c="$bdir"/test/pre/
@@ -328,6 +333,11 @@ tmpf="/tmp/ls.$$.tmp"
 rm -f "$tmpf"
 find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
+
+	if [ ${_must_exit_} -ne 0 ]; then
+		exit ${_exit_code_}
+	fi
+
 	sleep $delay_1
 	START=$(date +%s)
 	_l2="$_l"'/'"$_cmdfile"
@@ -407,6 +417,10 @@ cat "$tmpf" | while read _cmdfile; do
 	sync_install_log_
 done
 
+
+if [ ${_must_exit_} -ne 0 ]; then
+	exit ${_exit_code_}
+fi
 
 
 echo "test/override"
