@@ -60,6 +60,10 @@ mkdir -p "$bdir"/test/pre
 mkdir -p "$bdir"/test/override
 ################## dirs ##################
 
+function filter_special_chars()
+{
+	sed -i -e 's#\\\\#\\#g' "$1"
+}
 
 
 level_0_keys=`cat /tmp/circle_yml.json | jq keys[] |wc -l 2>/dev/null|tr -d " "`
@@ -200,7 +204,6 @@ if [ $level_0_keys > 0 ]; then
 							cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' | jq keys[0] \
 								| sed -e 's#^"##' | sed -e 's#"$##' \
 								>> "$bdir"/dependencies/pre/"$_cmd_count"_normal.txt
-
 						else
 							# bg
 							cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' | jq keys[0] \
@@ -253,7 +256,6 @@ if [ $level_0_keys > 0 ]; then
 							cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' | jq keys[0] \
 								| sed -e 's#^"##' | sed -e 's#"$##' \
 								>> "$bdir"/test/pre/"$_cmd_count"_normal.txt
-
 						else
 							# bg
 							cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' | jq keys[0] \
@@ -295,7 +297,6 @@ if [ $level_0_keys > 0 ]; then
 							cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' | jq keys[0] \
 								| sed -e 's#^"##' | sed -e 's#"$##' \
 								>> "$bdir"/test/override/"$_cmd_count"_normal.txt
-
 						else
 							# bg
 							cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' | jq keys[0] \
@@ -314,6 +315,7 @@ if [ $level_0_keys > 0 ]; then
 		if [ -e "$cmd_file" ]; then
 			# echo "$cmd_file"
 			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
+			filter_special_chars "$cmd_file" 2>/dev/null
 		fi
 	done
 
@@ -321,12 +323,14 @@ if [ $level_0_keys > 0 ]; then
 		if [ -e "$cmd_file" ]; then
 			# echo "$cmd_file"
 			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
+			filter_special_chars "$cmd_file" 2>/dev/null
 		fi
 	done
 	cd "$bdir"/test/override/ && find . name '*.txt' 2>/dev/null | while read cmd_file; do
 		if [ -e "$cmd_file" ]; then
 			# echo "$cmd_file"
 			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
+			filter_special_chars "$cmd_file" 2>/dev/null
 		fi
 	done
 
@@ -334,10 +338,6 @@ else
 	echo "no commands in circle.yml file"
 	exit 1
 fi
-
-# cat /tmp/circle_yml.json | jq '.test.override'| jq keys| jq max
-# cat /tmp/circle_yml.json | jq '.test.override[16]' | jq keys
-# cat /tmp/circle_yml.json | jq '.test.override[16][]' | jq keys
 
 
 chown -R ubuntu:ubuntu "$bdir"
