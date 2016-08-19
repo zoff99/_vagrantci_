@@ -19,7 +19,6 @@
 #
 
 
-
 NC='\033[0m' # No Color
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -221,6 +220,13 @@ _must_exit_=0
 _exit_code_=0
 
 
+function exit2()
+{
+	echo $_must_exit_ > /tmp/_must_exit_
+	echo $_exit_code_ > /tmp/_exit_code_
+}
+
+
 echo "dependencies/pre"
 _l="$ldir"/dependencies/pre/
 _c="$bdir"/dependencies/pre/
@@ -232,7 +238,9 @@ find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
 
 	if [ ${_must_exit_} -ne 0 ]; then
-		exit ${_exit_code_}
+		export _must_exit_
+		export _exit_code_
+		exit2 ${_exit_code_}
 	fi
 
 	sleep $delay_1
@@ -284,7 +292,9 @@ cat "$tmpf" | while read _cmdfile; do
 			clean_up
 			_must_exit_=1
 			_exit_code_=$excode
-			exit $excode
+			export _must_exit_
+			export _exit_code_
+			exit2 $excode
 		fi
 	else
 		sleep $delay_2
@@ -318,6 +328,8 @@ done
 
 sync_install_log_
 
+export _must_exit_=`cat /tmp/_must_exit_`
+export _exit_code_=`cat /tmp/_exit_code_`
 
 if [ ${_must_exit_} -ne 0 ]; then
 	exit ${_exit_code_}
@@ -335,7 +347,9 @@ find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
 
 	if [ ${_must_exit_} -ne 0 ]; then
-		exit ${_exit_code_}
+		export _must_exit_
+		export _exit_code_
+		exit2 ${_exit_code_}
 	fi
 
 	sleep $delay_1
@@ -386,7 +400,9 @@ cat "$tmpf" | while read _cmdfile; do
 			clean_up
 			_must_exit_=1
 			_exit_code_=$excode
-			exit $excode
+			export _must_exit_
+			export _exit_code_
+			exit2 $excode
 		fi
 	else
 		sleep $delay_2
@@ -417,6 +433,9 @@ cat "$tmpf" | while read _cmdfile; do
 	sync_install_log_
 done
 
+
+export _must_exit_=`cat /tmp/_must_exit_`
+export _exit_code_=`cat /tmp/_exit_code_`
 
 if [ ${_must_exit_} -ne 0 ]; then
 	exit ${_exit_code_}
