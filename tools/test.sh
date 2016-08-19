@@ -159,7 +159,8 @@ if [ "$bg_count""x" != "0x" ]; then
 
 
 	# collect artifacts -------------------------
-	find . -maxdepth 1|grep -v '^./index.html$'| while read output_file; do
+	cd "$CIRCLE_ARTIFACTS"
+	find . -maxdepth 1|sort -n|grep -v '^./index.html$'|grep -v '^\.$' | grep -v '^\.\.$'| while read output_file; do
 		echo -n "$html_template_output_files_1" >> "$fname"
 		echo -n "$output_file" >> "$fname"
 		echo -n "$html_template_output_files_2" >> "$fname"
@@ -251,9 +252,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		# ------- log -------
@@ -290,9 +291,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
@@ -342,9 +343,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		rm -f "/tmp/xyz.txt"
@@ -380,9 +381,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
@@ -430,9 +431,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		rm -f "/tmp/xyz.txt"
@@ -467,9 +468,9 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
