@@ -38,36 +38,36 @@ GOTO :UNKNOWN
 
 	if "%vm_setup_ready%" == 0 (
 		echo " ** halting VM ** "
-		vagrant halt --force
+		call vagrant halt --force
 
 		echo " ** destroy VM ** "
-		vagrant destroy --force
+		call vagrant destroy --force
 		DEL "%status_file%" > NUL 2> NUL
 		echo ""
 
 		echo " ** setup VM ** "
-		vagrant up --provision
+		call vagrant up --provision
 
 		echo " ** suspending VM ** "
-		vagrant suspend
+		call vagrant suspend
 
 		echo " ** saving VM snapshot vagrantci001 ** "
-		vagrant snapshot save "vagrantci001"
+		call vagrant snapshot save "vagrantci001"
 
 		echo " ** CI run ** "
 		echo ""
-		vagrant up --provision
+		call vagrant up --provision
 	) else (
 		echo " ** halting VM ** "
-		vagrant suspend
-		vagrant halt --force
+		call vagrant suspend
+		call vagrant halt --force
 
 		echo " ** resetting to VM snapshot vagrantci001 ** "
-		vagrant snapshot restore "vagrantci001"
+		call vagrant snapshot restore "vagrantci001"
 
 		echo " ** CI run ** "
 		echo ""
-		vagrant up --provision
+		call vagrant up --provision
 	)
 
 	GOTO NEXT
@@ -75,7 +75,7 @@ GOTO :UNKNOWN
 :DESTROY
 
 		echo " ** destroy VM ** "
-		vagrant destroy --force
+		call vagrant destroy --force
 		DEL "%status_file%" > NUL 2> NUL
 		echo ""
 
