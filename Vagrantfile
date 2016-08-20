@@ -23,7 +23,7 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
-  config.vm.hostname = "circleci.box"
+#  config.vm.hostname = "circleci.box"
   config.vm.network :forwarded_port, guest: 80, host: 56999, id: "www", auto_correct: true
   config.vm.network :forwarded_port, guest: 22, host: 2201, id: "ssh", auto_correct: true
 #  cXonfig.vm.network :private_network, ip: "192.168.77.33"
