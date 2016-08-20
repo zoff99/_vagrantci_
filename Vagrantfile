@@ -23,9 +23,13 @@ ENV["LC_ALL"] = "en_US.UTF-8"
 Vagrant.configure("2") do |config|
   config.vm.box = "hashicorp/precise64"
   config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+#  this does not work on windows -------
 #  config.vm.hostname = "circleci.box"
+#  this does not work on windows -------
+
   config.vm.network :forwarded_port, guest: 80, host: 56999, id: "www", auto_correct: true
-  config.vm.network :forwarded_port, guest: 22, host: 2201, id: "ssh", auto_correct: true
+  config.vm.network :forwarded_port, guest: 22, host: 52999, id: "ssh", auto_correct: true
 #  cXonfig.vm.network :private_network, ip: "192.168.77.33"
 
   config.vm.provider :virtualbox do |vb|
@@ -34,10 +38,13 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
   end
 
+#  config.ssh.private_key_path = "./.vagrant/i_prv_key"
   config.ssh.username = "vagrant"
+  config.ssh.password = "vagrant"
+  config.ssh.insert_key = false 
 
   hostname = "circleci.box"
-  locale = "en_GB.UTF-8"
+  locale = "en_US.UTF-8"
 
   # Shared folders
   config.vm.synced_folder ".", "/srv"
