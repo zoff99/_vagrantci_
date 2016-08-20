@@ -252,6 +252,9 @@ cat "$tmpf" | while read _cmdfile; do
 	_not_bg=$?
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
 		END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
@@ -285,7 +288,7 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== ERROR ====="
+			echo -e "${RED}""===== ERROR ====="
 			cat $_c2
 			echo "====== LOG ======"
 			tail -10 "$_l2"
@@ -300,6 +303,9 @@ cat "$tmpf" | while read _cmdfile; do
 	else
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
 
@@ -361,6 +367,9 @@ cat "$tmpf" | while read _cmdfile; do
 	_not_bg=$?
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
 		END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
@@ -393,7 +402,7 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== ERROR ====="
+			echo -e "${RED}""===== ERROR ====="
 			cat $_c2
 			echo "====== LOG ======"
 			tail -10 "$_l2"
@@ -408,6 +417,9 @@ cat "$tmpf" | while read _cmdfile; do
 	else
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
 
@@ -460,6 +472,9 @@ cat "$tmpf" | while read _cmdfile; do
 	_not_bg=$?
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
 		END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
@@ -492,7 +507,7 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== TEST FAILED ====="
+			echo -e "${RED}""===== TEST FAILED ====="
 			cat $_c2
 			echo "========= LOG ========="
 			tail -10 "$_l2"
@@ -502,6 +517,9 @@ cat "$tmpf" | while read _cmdfile; do
 	else
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
+		echo -e "${NC}""== COMMAND =="
+		cat "$_c2" |head -2|cut -c 1-40
+		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
 
