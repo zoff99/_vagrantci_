@@ -26,6 +26,8 @@ GREEN='\033[0;32m'
 delay_1=1
 delay_2=8
 
+command_chars=60
+
 timeout_value_normal="120.5m" # 2h
 timeout_value_bg="300.5m" # 5h
 
@@ -213,11 +215,13 @@ echo "$html_template_099" >> "$CIRCLE_ARTIFACTS"/index.html
 }
 
 
-
-sync_install_log_
-
 _must_exit_=0
 _exit_code_=0
+echo $_must_exit_ > /tmp/_must_exit_
+echo $_exit_code_ > /tmp/_exit_code_
+
+
+sync_install_log_
 
 
 function exit2()
@@ -253,7 +257,7 @@ cat "$tmpf" | while read _cmdfile; do
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
@@ -304,7 +308,7 @@ cat "$tmpf" | while read _cmdfile; do
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
@@ -368,7 +372,7 @@ cat "$tmpf" | while read _cmdfile; do
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
@@ -418,7 +422,7 @@ cat "$tmpf" | while read _cmdfile; do
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
@@ -473,7 +477,7 @@ cat "$tmpf" | while read _cmdfile; do
 	if [ $_not_bg -eq 1 ]; then
 		echo -e "${GREEN}""$_cmdfile""${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
 		excode=$?
@@ -518,7 +522,7 @@ cat "$tmpf" | while read _cmdfile; do
 		sleep $delay_2
 		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
 		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-40
+		cat "$_c2" |head -2|cut -c 1-${command_chars}
 		echo -e "${NC}""============="
 		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
 		echo $! >> "$pids"
