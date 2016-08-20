@@ -18,7 +18,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-set -x
+# set -x
 
 err_file="/tmp/wait_for_avd.$$.txt"
 export err_file
@@ -26,20 +26,20 @@ rm -f "$err_file"
 
 wait_until()
 {
-	set -x
+	# set -x
 
 	counter=2
 	export counter
 
-	echo "+ counter=$counter"
-	echo "+ err_file=$err_file"
+	# echo "+ counter=$counter"
+	# echo "+ err_file=$err_file"
 
 	while ! $@
 	do
 		counter=$[ $counter + 1 ]
 
-		echo "+- counter=$counter"
-		echo "+- err_file=$err_file"
+		# echo "+- counter=$counter"
+		# echo "+- err_file=$err_file"
 
 		if [ $counter -gt 21 ]; then
 			touch "$err_file"
@@ -52,7 +52,7 @@ wait_until()
 
 adb_shell_getprop()
 {
-	set -x
+	# set -x
 
 	adb shell getprop $1 \
 	| tr -d ' ' | sed -e 's#\r##'
@@ -60,7 +60,7 @@ adb_shell_getprop()
 
 device_ready()
 {
-	set -x
+	# set -x
 
 	[ "$(adb_shell_getprop init.svc.bootanim)" = "stopped" ]
 }
