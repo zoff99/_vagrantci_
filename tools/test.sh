@@ -224,6 +224,7 @@ function exit2()
 {
 	echo $_must_exit_ > /tmp/_must_exit_
 	echo $_exit_code_ > /tmp/_exit_code_
+	exit $_exit_code_
 }
 
 
