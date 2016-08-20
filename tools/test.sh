@@ -285,11 +285,11 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== CMD ====="
+			echo "===== ERROR ====="
 			cat $_c2
-			echo "===== LOG ====="
+			echo "====== LOG ======"
 			tail -10 "$_l2"
-			echo "==============="
+			echo "================="
 			clean_up
 			_must_exit_=1
 			_exit_code_=$excode
@@ -393,11 +393,11 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== CMD ====="
+			echo "===== ERROR ====="
 			cat $_c2
-			echo "===== LOG ====="
+			echo "====== LOG ======"
 			tail -10 "$_l2"
-			echo "==============="
+			echo "================="
 			clean_up
 			_must_exit_=1
 			_exit_code_=$excode
@@ -492,11 +492,11 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo "===== CMD ====="
+			echo "===== TEST FAILED ====="
 			cat $_c2
-			echo "===== LOG ====="
+			echo "========= LOG ========="
 			tail -10 "$_l2"
-			echo "==============="
+			echo "======================="
 			:
 		fi
 	else
@@ -530,4 +530,10 @@ done
 
 
 clean_up
+
+
+export _must_exit_=0
+export _exit_code_=0
+echo $_must_exit_ > /tmp/_must_exit_
+echo $_exit_code_ > /tmp/_exit_code_
 

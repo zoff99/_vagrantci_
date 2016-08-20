@@ -469,11 +469,15 @@ echo "running tests..."
 ######## TEST ########
 
 printf "cd $CIRCLE_PROJECT_REPONAME"' \n chmod a+rx /srv/tools/test.sh \n /srv/tools/test.sh \n' | su - ubuntu 2>&1 | tee -a /srv/dl/install.log
-res=$?
+
+export _must_exit_=`cat /tmp/_must_exit_`
+export _exit_code_=`cat /tmp/_exit_code_`
 
 sync_install_log_
 
-if [ $res -ne 0 ];then exit 1;fi
+if [ "$_must_exit_""x" != "0x" ];then
+	exit $_exit_code_
+fi
 
 ######## TEST ########
 ######## TEST ########
