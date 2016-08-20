@@ -40,8 +40,9 @@ Vagrant.configure("2") do |config|
 
 #  config.ssh.private_key_path = "./.vagrant/i_prv_key"
   config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
+#  config.ssh.password = "vagrant"
   config.ssh.insert_key = false 
+  config.ssh.paranoid = false
 
   hostname = "circleci.box"
   locale = "en_US.UTF-8"
