@@ -42,7 +42,7 @@ GOTO :UNKNOWN
 
 		echo " ** destroy VM ** "
 		vagrant destroy --force
-		DEL "%status_file%"
+		DEL "%status_file%" > NUL 2> NUL
 		echo ""
 
 		echo " ** setup VM ** "
@@ -76,7 +76,7 @@ GOTO :UNKNOWN
 
 		echo " ** destroy VM ** "
 		vagrant destroy --force
-		DEL "%status_file%"
+		DEL "%status_file%" > NUL 2> NUL
 		echo ""
 
 	GOTO NEXT
@@ -84,7 +84,8 @@ GOTO :UNKNOWN
 
 :UNKNOWN
 
-	echo " ** unknown command"
+	echo "vagrantci.bat run	-> run CI"
+	echo "vagrantci.bat destroy	-> destroy VM"
 
 :NEXT
 
