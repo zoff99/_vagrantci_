@@ -160,6 +160,9 @@ if [ "$bg_count""x" != "0x" ]; then
 
 
 	# collect artifacts -------------------------
+
+	echo '<a href="../circle-junit/"><B>other files</b></a><br><br>' >> "$fname"
+
 	cd "$CIRCLE_ARTIFACTS"
 	find . -maxdepth 1|sort -n|grep -v '^./index.html$'|grep -v '^\.$' | grep -v '^\.\.$'| while read output_file; do
 		echo -n "$html_template_output_files_1" >> "$fname"
