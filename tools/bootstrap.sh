@@ -448,6 +448,7 @@ if [ $vm_setup_ready_flag -eq 0 ]; then
 	cp -av /usr/bin/apt-get /usr/bin/apt-get.ORIG
 	echo '#!/bin/bash
 	export DEBIAN_FRONTEND=noninteractive
+	/usr/bin/apt-get.ORIG -y -m "$@"
 	' > /usr/bin/apt-get
 
 	chown root:root /usr/bin/apt-get
