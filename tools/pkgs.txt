@@ -1,6 +1,8 @@
+g++
 pkg-config
 scala
 curl
 npm
 firefox
 python-pip
+libperl-dev
