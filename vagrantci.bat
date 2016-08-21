@@ -1,4 +1,4 @@
-@echo off
+@ECHO OFF
 
 REM
 REM VagrantCI - a Poor Man's CI System
@@ -21,9 +21,28 @@ REM
 
 REM C:\HashiCorp\Vagrant\bin\vagrant
 
-
 set status_file=".\dl\vm_setup_ready.txt"
 set arg1=%1
+
+
+setlocal enableDelayedExpansion
+set NL=^
+
+
+
+set vagrantci__buf= !NL! ^
+================================================== !NL!
+
+
+set vagrantci__header= !NL! ^
+================================================== !NL! ^
+                   VagrantCI !NL!
+
+set vagrantci__footer= !NL! ^
+================================================== !NL! ^
+!NL!
+
+
 
 IF "%arg1%" == "run" GOTO :RUN
 IF "%arg1%" == "destroy" GOTO :DESTROY
@@ -32,60 +51,95 @@ GOTO :UNKNOWN
 :RUN
 
 	set vm_setup_ready=0
+
 	if exist %status_file% (
 		set vm_setup_ready=1
 	)
 
-	if "%vm_setup_ready%" == 0 (
+	if %vm_setup_ready% == 0 (
+
+		echo !vagrantci__header!
+
 		echo " ** halting VM ** "
 		call vagrant halt --force
 
+
+		echo !vagrantci__buf!
 		echo " ** destroy VM ** "
 		call vagrant destroy --force
 		DEL "%status_file%" > NUL 2> NUL
 		echo ""
 
+		echo !vagrantci__buf!
 		echo " ** setup VM ** "
 		call vagrant up --provision
 
+		echo !vagrantci__buf!
 		echo " ** suspending VM ** "
 		call vagrant suspend
 
+		echo !vagrantci__buf!
 		echo " ** saving VM snapshot vagrantci001 ** "
 		call vagrant snapshot save "vagrantci001"
 
+		echo !vagrantci__buf!
 		echo " ** CI run ** "
 		echo ""
 		call vagrant up --provision
+
+		echo !vagrantci__footer!
+
 	) else (
+
+		echo !vagrantci__header!
+
 		echo " ** halting VM ** "
 		call vagrant suspend
 		call vagrant halt --force
 
+		echo !vagrantci__buf!
 		echo " ** resetting to VM snapshot vagrantci001 ** "
 		call vagrant snapshot restore "vagrantci001"
 
+		echo !vagrantci__buf!
 		echo " ** CI run ** "
 		echo ""
 		call vagrant up --provision
+
+		echo !vagrantci__footer!
 	)
 
 	GOTO NEXT
 
 :DESTROY
 
+		echo !vagrantci__header!
+
+		echo really destroy VM? [Y/n]
+		set INPUT=
+		set /P INPUT=:
+		If "%INPUT%"=="n" goto nod
+		If "%INPUT%"=="N" goto nod
+:yesd
 		echo " ** destroy VM ** "
 		call vagrant destroy --force
 		DEL "%status_file%" > NUL 2> NUL
-		echo ""
+		goto contd
+:nod
+		echo ...
+:contd
+
+		echo !vagrantci__footer!
 
 	GOTO NEXT
 
 
 :UNKNOWN
 
+	echo !vagrantci__header!
 	echo "vagrantci.bat run	-> run CI"
 	echo "vagrantci.bat destroy	-> destroy VM"
+	echo !vagrantci__footer!
 
 :NEXT
 
