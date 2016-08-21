@@ -443,8 +443,28 @@ cd /usr/local/ && chmod -R a+rx android-ndk >> /srv/dl/install.log 2>&1
 cp /srv/tools/circle-android /usr/bin/circle-android >> /srv/dl/install.log 2>&1
 chmod a+rx /usr/bin/circle-android >> /srv/dl/install.log 2>&1
 
+if [ $vm_setup_ready_flag -eq 0 ]; then
+	# tweak "apt-get install" ------ 1 ----------------
+	cp -av /usr/bin/apt-get /usr/bin/apt-get.ORIG
+	echo '#!/bin/bash
+	/usr/bin/apt-get -y -m "$@"
+	' > /usr/bin/apt-get.ORIG
 
+	chown root:root /usr/bin/apt-get
+	chmod a+rx /usr/bin/apt-get
+	chmod u+x /usr/bin/apt-get
+	# tweak "apt-get install" ------ 1 ----------------
+else
+	# tweak "apt-get install" ------ 2 ----------------
+	echo '#!/bin/bash
+	/usr/bin/apt-get -y -m "$@"
+	' > /usr/bin/apt-get.ORIG
 
+	chown root:root /usr/bin/apt-get
+	chmod a+rx /usr/bin/apt-get
+	chmod u+x /usr/bin/apt-get
+	# tweak "apt-get install" ------ 2 ----------------
+fi
 
 if [ $vm_setup_ready_flag -eq 0 ]; then
 	:
