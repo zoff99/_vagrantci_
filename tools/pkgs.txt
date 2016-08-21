@@ -2,3 +2,4 @@ scala
 curl
 npm
 firefox
+python-pip
