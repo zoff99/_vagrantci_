@@ -67,7 +67,7 @@ function filter_special_chars()
 
 function remove_specials_from_cmd_file()
 {
-	cd "_dir3_" && find . name '*.txt' 2>/dev/null | while read cmd_file; do
+	cd "$1" && find . name '*.txt' 2>/dev/null | while read cmd_file; do
 		if [ -e "$cmd_file" ]; then
 			# echo "$cmd_file"
 			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
@@ -238,7 +238,7 @@ if [ $level_0_keys > 0 ]; then
 
 			export mainkey='dependencies'
 			export subkey='pre'
-			process_subkey()
+			process_subkey
 			remove_specials_from_cmd_file "$bdir""/dependencies/pre/"
 
 		fi
@@ -257,12 +257,12 @@ if [ $level_0_keys > 0 ]; then
 
 			export mainkey='test'
 			export subkey='pre'
-			process_subkey()
+			process_subkey
 			remove_specials_from_cmd_file "$bdir""/test/pre/"
 
 			export mainkey='test'
 			export subkey='override'
-			process_subkey()
+			process_subkey
 			remove_specials_from_cmd_file "$bdir""/test/override/"
 
 
