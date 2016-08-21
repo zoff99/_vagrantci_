@@ -31,9 +31,9 @@ command_chars=60
 timeout_value_normal="120.5m" # 2h
 timeout_value_bg="300.5m" # 5h
 
-bdir="/tmp/CI/"
-ldir="/tmp/logCI/"
-pids="/tmp/ci_bg_pids.txt"
+export bdir="/tmp/CI/"
+export ldir="/tmp/logCI/"
+export pids="/tmp/ci_bg_pids.txt"
 
 mkdir -p "$ldir"
 rm -f "$pids"
@@ -235,9 +235,22 @@ function exit2()
 }
 
 
-echo "dependencies/pre"
-_l="$ldir"/dependencies/pre/
-_c="$bdir"/dependencies/pre/
+function run_test_group()
+{
+
+	mainkey_tests="$1"
+	subkey_tests="$2"
+	need_exit="$3"
+
+if [ "$need_exit""x" == "ex_yesx" ]; then
+	need_ex=1
+else
+	need_ex=0
+fi
+
+echo "$mainkey_tests""/""$subkey_tests"
+_l="$ldir"/"$mainkey_tests"/"$subkey_tests"/
+_c="$bdir"/"$mainkey_tests"/"$subkey_tests"/
 cd "$_c"
 mkdir -p "$_l"
 tmpf="/tmp/ls.$$.tmp"
@@ -245,10 +258,12 @@ rm -f "$tmpf"
 find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
 cat "$tmpf" | while read _cmdfile; do
 
-	if [ ${_must_exit_} -ne 0 ]; then
-		export _must_exit_
-		export _exit_code_
-		exit2 ${_exit_code_}
+	if [ $need_ex -eq 1 ]; then
+		if [ ${_must_exit_} -ne 0 ]; then
+			export _must_exit_
+			export _exit_code_
+			exit2 ${_exit_code_}
+		fi
 	fi
 
 	sleep $delay_1
@@ -273,7 +288,7 @@ cat "$tmpf" | while read _cmdfile; do
 		fi
 		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#${time_formatted}#" \
-			| sed -e "s#@@TITLE@@#dependencies.pre ${_cmdfile}#" \
+			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
@@ -295,17 +310,25 @@ cat "$tmpf" | while read _cmdfile; do
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		if [ $excode -ne 0 ]; then
-			echo -e "${RED}""===== ERROR ====="
+
+			if [ "$mainkey_tests""/""$subkey_tests""/x" == "test/override/x" ]; then
+				echo -e "${RED}""===== TEST FAILED ====="
+			else
+				echo -e "${RED}""===== ERROR ====="
+			fi
 			cat $_c2
 			echo "====== LOG ======"
 			tail -10 "$_l2"
 			echo "================="
-			clean_up
-			_must_exit_=1
-			_exit_code_=$excode
-			export _must_exit_
-			export _exit_code_
-			exit2 $excode
+
+			if [ $need_ex -eq 1 ]; then
+				clean_up
+				_must_exit_=1
+				_exit_code_=$excode
+				export _must_exit_
+				export _exit_code_
+				exit2 $excode
+			fi
 		fi
 	else
 		sleep $delay_2
@@ -319,7 +342,7 @@ cat "$tmpf" | while read _cmdfile; do
 		_red_green='blue'
 		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#-:--:--#" \
-			| sed -e "s#@@TITLE@@#dependencies.pre ${_cmdfile}#" \
+			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
@@ -339,220 +362,27 @@ cat "$tmpf" | while read _cmdfile; do
 	sync_install_log_
 done
 
-
-sync_install_log_
-
-export _must_exit_=`cat /tmp/_must_exit_`
-export _exit_code_=`cat /tmp/_exit_code_`
-
-if [ ${_must_exit_} -ne 0 ]; then
-	exit ${_exit_code_}
-fi
+}
 
 
-echo "test/pre"
-_l="$ldir"/test/pre/
-_c="$bdir"/test/pre/
-cd "$_c"
-mkdir -p "$_l"
-tmpf="/tmp/ls.$$.tmp"
-rm -f "$tmpf"
-find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
-cat "$tmpf" | while read _cmdfile; do
-
+function sync_and_check_exit()
+{
+	sync_install_log_
+	export _must_exit_=`cat /tmp/_must_exit_`
+	export _exit_code_=`cat /tmp/_exit_code_`
 	if [ ${_must_exit_} -ne 0 ]; then
-		export _must_exit_
-		export _exit_code_
-		exit2 ${_exit_code_}
+		exit ${_exit_code_}
 	fi
+}
 
-	sleep $delay_1
-	START=$(date +%s)
-	_l2="$_l"'/'"$_cmdfile"
-	_c2="$_c""$_cmdfile"
-	echo "$_cmdfile"|grep 'bg\.txt' > /dev/null 2> /dev/null
-	_not_bg=$?
-	if [ $_not_bg -eq 1 ]; then
-		echo -e "${GREEN}""$_cmdfile""${NC}"
-		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-${command_chars}
-		echo -e "${NC}""============="
-		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
-		excode=$?
-		END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
-		time_formatted=`echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'`
+run_test_group "dependencies" "pre" "ex_yes"
+sync_and_check_exit
 
-		_red_green='green'
-		if [ $excode -ne 0 ]; then
-			_red_green='red'
-		fi
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
-			| sed -e "s#@@TIME@@#${time_formatted}#" \
-			| sed -e "s#@@TITLE@@#test.pre ${_cmdfile}#" \
-			>> "$CIRCLE_ARTIFACTS"/index.html
+run_test_group "test" "pre" "ex_yes"
+sync_and_check_exit
 
-		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		# ------- commands -------
-
-		rm -f "/tmp/xyz.txt"
-		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
-
-		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
-
-		if [ $excode -ne 0 ]; then
-			echo -e "${RED}""===== ERROR ====="
-			cat $_c2
-			echo "====== LOG ======"
-			tail -10 "$_l2"
-			echo "================="
-			clean_up
-			_must_exit_=1
-			_exit_code_=$excode
-			export _must_exit_
-			export _exit_code_
-			exit2 $excode
-		fi
-	else
-		sleep $delay_2
-		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
-		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-${command_chars}
-		echo -e "${NC}""============="
-		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
-		echo $! >> "$pids"
-
-		_red_green='blue'
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
-			| sed -e "s#@@TIME@@#-:--:--#" \
-			| sed -e "s#@@TITLE@@#test.pre ${_cmdfile}#" \
-			>> "$CIRCLE_ARTIFACTS"/index.html
-
-		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		# ------- commands -------
-
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
-	fi
-
-	sync_install_log_
-done
-
-
-export _must_exit_=`cat /tmp/_must_exit_`
-export _exit_code_=`cat /tmp/_exit_code_`
-
-if [ ${_must_exit_} -ne 0 ]; then
-	exit ${_exit_code_}
-fi
-
-
-echo "test/override"
-_l="$ldir"/test/override/
-_c="$bdir"/test/override/
-cd "$_c"
-mkdir -p "$_l"
-tmpf="/tmp/ls.$$.tmp"
-rm -f "$tmpf"
-find . -name '*.txt' 2> /dev/null | sort -V > "$tmpf"
-cat "$tmpf" | while read _cmdfile; do
-	sleep $delay_1
-	START=$(date +%s)
-	_l2="$_l"'/'"$_cmdfile"
-	_c2="$_c""$_cmdfile"
-	echo "$_cmdfile"|grep 'bg\.txt' > /dev/null 2> /dev/null
-	_not_bg=$?
-	if [ $_not_bg -eq 1 ]; then
-		echo -e "${GREEN}""$_cmdfile""${NC}"
-		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-${command_chars}
-		echo -e "${NC}""============="
-		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_normal" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )
-		excode=$?
-		END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
-		time_formatted=`echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'`
-
-		_red_green='green'
-		if [ $excode -ne 0 ]; then
-			_red_green='red'
-		fi
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
-			| sed -e "s#@@TIME@@#${time_formatted}#" \
-			| sed -e "s#@@TITLE@@#test.override ${_cmdfile}#" \
-			>> "$CIRCLE_ARTIFACTS"/index.html
-
-		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		# ------- commands -------
-
-		rm -f "/tmp/xyz.txt"
-		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
-
-		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
-
-		if [ $excode -ne 0 ]; then
-			echo -e "${RED}""===== TEST FAILED ====="
-			cat $_c2
-			echo "========= LOG ========="
-			tail -10 "$_l2"
-			echo "======================="
-			:
-		fi
-	else
-		sleep $delay_2
-		echo -e "${GREEN}""$_cmdfile${NC} ${RED}[BG]${NC}"
-		echo -e "${NC}""== COMMAND =="
-		cat "$_c2" |head -2|cut -c 1-${command_chars}
-		echo -e "${NC}""============="
-		( cd ~/"$CIRCLE_PROJECT_REPONAME" ; . /tmp/.ci_rc ; timeout --signal=SIGKILL "$timeout_value_bg" /bin/bash -c "$_c2" </dev/null >> "$_l2" 2>&1 )&
-		echo $! >> "$pids"
-
-		_red_green='blue'
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
-			| sed -e "s#@@TIME@@#-:--:--#" \
-			| sed -e "s#@@TITLE@@#test.override ${_cmdfile}#" \
-			>> "$CIRCLE_ARTIFACTS"/index.html
-
-		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		# ------- commands -------
-
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
-	fi
-
-	sync_install_log_
-done
-
+run_test_group "test" "override" "x"
+sync_and_check_exit
 
 clean_up
 

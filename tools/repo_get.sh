@@ -44,7 +44,7 @@ ci_cache_dirs="/srv/dl/ci_cache_dirs.txt"
 ci_cache_datadir="/srv/dl/"
 
 ################## dirs ##################
-bdir="/tmp/CI/"
+export bdir="/tmp/CI/"
 rm -Rf "$bdir"
 
 mkdir -p "$bdir"
@@ -65,6 +65,17 @@ function filter_special_chars()
 	sed -i -e 's#\\\\#\\#g' "$1"
 }
 
+function remove_specials_from_cmd_file()
+{
+	cd "_dir3_" && find . name '*.txt' 2>/dev/null | while read cmd_file; do
+		if [ -e "$cmd_file" ]; then
+			# echo "$cmd_file"
+			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
+			filter_special_chars "$cmd_file" 2>/dev/null
+		fi
+	done
+}
+
 
 level_0_keys=`cat /tmp/circle_yml.json | jq keys[] |wc -l 2>/dev/null|tr -d " "`
 
@@ -72,6 +83,54 @@ level_0_keys=`cat /tmp/circle_yml.json | jq keys[] |wc -l 2>/dev/null|tr -d " "`
 ci_rc="/tmp/.ci_rc"
 rm -f "$ci_rc"
 touch "$ci_rc"
+
+
+
+
+function process_subkey()
+{
+
+			cat /tmp/circle_yml.json | jq '.'"$mainkey"''|jq keys[] | grep "$subkey" > /dev/null 2> /dev/null
+			res=$?
+			if [ $res -eq 0 ]; then
+				echo "   * ""$subkey"
+
+				_cmd_count=0
+
+				cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'' | jq keys[] | sort -n | while read _linenum ; do
+
+					_cmd_count=$[ $_cmd_count + 1 ]
+					# echo "     * ""$_cmd_count"
+
+					cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq keys 2>&1| grep 'has no keys' > /dev/null 2>/dev/null
+					res2=$? # 0=no keys
+					if [ $res2 -eq 0 ]; then
+						# flat
+						cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' \
+							| sed -e 's#^"##' | sed -e 's#"$##' \
+							>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_normal.txt
+					else
+						# keys
+						cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"'][]' | jq keys[] | grep 'background' > /dev/null 2>/dev/null
+						_key_no_background=$?
+						if [ $_key_no_background -eq 1 ]; then
+							# normal
+							cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq keys[0] \
+								| sed -e 's#^"##' | sed -e 's#"$##' \
+								>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_normal.txt
+						else
+							# bg
+							cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq keys[0] \
+								| sed -e 's#^"##' | sed -e 's#"$##' \
+								>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_bg.txt
+						fi
+					fi
+				done
+			fi
+
+}
+
+
 
 echo
 echo "$level_0_keys keys:"
@@ -144,6 +203,8 @@ if [ $level_0_keys > 0 ]; then
 		level_1_keys=`cat /tmp/circle_yml.json | jq '.dependencies'| jq keys[] |wc -l 2>/dev/null|tr -d " "`
 
 		if [ $level_1_keys > 0 ]; then
+
+
 			cat /tmp/circle_yml.json | jq '.dependencies'|jq keys[] | grep 'cache_directories' > /dev/null 2> /dev/null
 			res=$?
 			if [ $res -eq 0 ]; then
@@ -175,44 +236,11 @@ if [ $level_0_keys > 0 ]; then
 			fi
 
 
+			export mainkey='dependencies'
+			export subkey='pre'
+			process_subkey()
+			remove_specials_from_cmd_file "$bdir""/dependencies/pre/"
 
-			cat /tmp/circle_yml.json | jq '.dependencies'|jq keys[] | grep 'pre' > /dev/null 2> /dev/null
-			res=$?
-			if [ $res -eq 0 ]; then
-				echo "   * pre"
-
-				_cmd_count=0
-
-				cat /tmp/circle_yml.json | jq '.dependencies.pre' | jq keys[] | sort -n | while read _linenum ; do
-
-					_cmd_count=$[ $_cmd_count + 1 ]
-					# echo "     * ""$_cmd_count"
-
-					cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' | jq keys 2>&1| grep 'has no keys' > /dev/null 2>/dev/null
-					res2=$? # 0=no keys
-					if [ $res2 -eq 0 ]; then
-						# flat
-						cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' \
-							| sed -e 's#^"##' | sed -e 's#"$##' \
-							>> "$bdir"/dependencies/pre/"$_cmd_count"_normal.txt
-					else
-						# keys
-						cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"'][]' | jq keys[] | grep 'background' > /dev/null 2>/dev/null
-						_key_no_background=$?
-						if [ $_key_no_background -eq 1 ]; then
-							# normal
-							cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/dependencies/pre/"$_cmd_count"_normal.txt
-						else
-							# bg
-							cat /tmp/circle_yml.json | jq '.dependencies.pre['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/dependencies/pre/"$_cmd_count"_bg.txt
-						fi
-					fi
-				done
-			fi
 		fi
 		# -------- dependencies --------
 	fi
@@ -227,112 +255,21 @@ if [ $level_0_keys > 0 ]; then
 
 		if [ $level_1_keys > 0 ]; then
 
-			cat /tmp/circle_yml.json | jq '.test'|jq keys[] | grep 'pre' > /dev/null 2> /dev/null
-			res=$?
-			if [ $res -eq 0 ]; then
-				echo "   * pre"
+			export mainkey='test'
+			export subkey='pre'
+			process_subkey()
+			remove_specials_from_cmd_file "$bdir""/test/pre/"
 
-				_cmd_count=0
-
-
-				cat /tmp/circle_yml.json | jq '.test.pre' | jq keys[] | sort -n | while read _linenum ; do
-
-					_cmd_count=$[ $_cmd_count + 1 ]
-					# echo "     * ""$_cmd_count"
-
-					cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' | jq keys 2>&1| grep 'has no keys' > /dev/null 2>/dev/null
-					res2=$? # 0=no keys
-					if [ $res2 -eq 0 ]; then
-						# flat
-						cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' \
-							| sed -e 's#^"##' | sed -e 's#"$##' \
-							>> "$bdir"/test/pre/"$_cmd_count"_normal.txt
-					else
-						# keys
-						cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"'][]' | jq keys[] | grep 'background' > /dev/null 2>/dev/null
-						_key_no_background=$?
-						if [ $_key_no_background -eq 1 ]; then
-							# normal
-							cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/test/pre/"$_cmd_count"_normal.txt
-						else
-							# bg
-							cat /tmp/circle_yml.json | jq '.test.pre['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/test/pre/"$_cmd_count"_bg.txt
-						fi
-					fi
-				done
-			fi
+			export mainkey='test'
+			export subkey='override'
+			process_subkey()
+			remove_specials_from_cmd_file "$bdir""/test/override/"
 
 
-
-			cat /tmp/circle_yml.json | jq '.test'|jq keys[] | grep 'override' > /dev/null 2> /dev/null
-			res=$?
-			if [ $res -eq 0 ]; then
-				echo "   * override"
-
-				_cmd_count=0
-
-
-				cat /tmp/circle_yml.json | jq '.test.override' | jq keys[] | sort -n | while read _linenum ; do
-
-					_cmd_count=$[ $_cmd_count + 1 ]
-					# echo "     * ""$_cmd_count"
-
-					cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' | jq keys 2>&1| grep 'has no keys' > /dev/null 2>/dev/null
-					res2=$? # 0=no keys
-					if [ $res2 -eq 0 ]; then
-						# flat
-						cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' \
-							| sed -e 's#^"##' | sed -e 's#"$##' \
-							>> "$bdir"/test/override/"$_cmd_count"_normal.txt
-					else
-						# keys
-						cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"'][]' | jq keys[] | grep 'background' > /dev/null 2>/dev/null
-						_key_no_background=$?
-						if [ $_key_no_background -eq 1 ]; then
-							# normal
-							cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/test/override/"$_cmd_count"_normal.txt
-						else
-							# bg
-							cat /tmp/circle_yml.json | jq '.test.override['"$_linenum"']' | jq keys[0] \
-								| sed -e 's#^"##' | sed -e 's#"$##' \
-								>> "$bdir"/test/override/"$_cmd_count"_bg.txt
-						fi
-					fi
-				done
-			fi
 		fi
 		# -------- test --------
 	fi
 
-
-	cd "$bdir"/dependencies/pre/ && find . name '*.txt' 2>/dev/null | while read cmd_file; do
-		if [ -e "$cmd_file" ]; then
-			# echo "$cmd_file"
-			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
-			filter_special_chars "$cmd_file" 2>/dev/null
-		fi
-	done
-
-	cd "$bdir"/test/pre/ && find . name '*.txt' 2>/dev/null | while read cmd_file; do
-		if [ -e "$cmd_file" ]; then
-			# echo "$cmd_file"
-			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
-			filter_special_chars "$cmd_file" 2>/dev/null
-		fi
-	done
-	cd "$bdir"/test/override/ && find . name '*.txt' 2>/dev/null | while read cmd_file; do
-		if [ -e "$cmd_file" ]; then
-			# echo "$cmd_file"
-			sed -i -e 's#\\"#"#g' "$cmd_file" 2>/dev/null
-			filter_special_chars "$cmd_file" 2>/dev/null
-		fi
-	done
 
 else
 	echo "no commands in circle.yml file"
