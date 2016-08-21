@@ -447,8 +447,8 @@ if [ $vm_setup_ready_flag -eq 0 ]; then
 	# tweak "apt-get install" ------ 1 ----------------
 	cp -av /usr/bin/apt-get /usr/bin/apt-get.ORIG
 	echo '#!/bin/bash
-	/usr/bin/apt-get -y -m "$@"
-	' > /usr/bin/apt-get.ORIG
+	export DEBIAN_FRONTEND=noninteractive
+	' > /usr/bin/apt-get
 
 	chown root:root /usr/bin/apt-get
 	chmod a+rx /usr/bin/apt-get
@@ -457,8 +457,9 @@ if [ $vm_setup_ready_flag -eq 0 ]; then
 else
 	# tweak "apt-get install" ------ 2 ----------------
 	echo '#!/bin/bash
-	/usr/bin/apt-get -y -m "$@"
-	' > /usr/bin/apt-get.ORIG
+	export DEBIAN_FRONTEND=noninteractive
+	/usr/bin/apt-get.ORIG -y -m "$@"
+	' > /usr/bin/apt-get
 
 	chown root:root /usr/bin/apt-get
 	chmod a+rx /usr/bin/apt-get

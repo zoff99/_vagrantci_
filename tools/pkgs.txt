@@ -1,3 +1,4 @@
+pkg-config
 scala
 curl
 npm
