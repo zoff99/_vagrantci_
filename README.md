@@ -48,9 +48,9 @@ your directory tree should look something like this:
 |-- _vagrantci_
 |   |-- dl
 |   |-- tools
-|   |-- Vagrantfile
 |   |-- vagrantci.bat
 |   |-- vagrantci.sh
+|   |-- Vagrantfile
 </pre>
 
 ### Running (the first time) [starting from $HOME]
