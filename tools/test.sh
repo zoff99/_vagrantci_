@@ -18,7 +18,6 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 #
 
-
 NC='\033[0m' # No Color
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -132,7 +131,6 @@ function clean_up()
 
 sync_install_log_
 
-
 # ---- paste all bg logs into HTML file ----
 bg_count=`cat "$CIRCLE_ARTIFACTS"/index.html | grep '@@%%::' | wc -l | tr -d ' '`
 bb_count=0
@@ -155,39 +153,39 @@ if [ "$bg_count""x" != "0x" ]; then
 		rm -f /tmp/xsed.$$.$bb_count.txt
 	done
 
-	fname="/tmp/outputfiles.$$.tmp"
-	rm -f "$fname"
+fi
+# ---- paste all bg logs into HTML file ----
 
 
-	# collect artifacts -------------------------
+# collect artifacts -------------------------
 
-	echo '<a href="../circle-junit/"><B>other files</b></a><br><br>' >> "$fname"
+fname="/tmp/outputfiles.$$.tmp"
+rm -f "$fname"
+echo '<a href="../circle-junit/"><B>other files</b></a><br><br>' >> "$fname"
 
-	cd "$CIRCLE_ARTIFACTS"
-	find . -maxdepth 1|sort -n|grep -v '^./index.html$'|grep -v '^\.$' | grep -v '^\.\.$'| while read output_file; do
-		echo -n "$html_template_output_files_1" >> "$fname"
-		echo -n "$output_file" >> "$fname"
-		echo -n "$html_template_output_files_2" >> "$fname"
-		echo -n "$output_file" >> "$fname"
-		echo "$html_template_output_files_3" >> "$fname"
-	done
-	# collect artifacts -------------------------
+cd "$CIRCLE_ARTIFACTS"
+find . -maxdepth 1|sort -n|grep -v '^./index.html$'|grep -v '^\.$' | grep -v '^\.\.$'| while read output_file; do
+	echo -n "$html_template_output_files_1" >> "$fname"
+	echo -n "$output_file" >> "$fname"
+	echo -n "$html_template_output_files_2" >> "$fname"
+	echo -n "$output_file" >> "$fname"
+	echo "$html_template_output_files_3" >> "$fname"
+done
+# collect artifacts -------------------------
 
-	echo '/@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@/ {
-  r '"${fname}"'
-  d
+echo '/@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@/ {
+r '"${fname}"'
+d
 }' </dev/null >/tmp/xsed.$$.outputfiles.txt
 
-	cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
-	sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
-	cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
+cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
+sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
+cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
 
-	rm -f /tmp/xsed.$$.outputfiles.txt
-	rm -f /tmp/temp_html.$$.outputfiles.txt
-fi
+rm -f /tmp/xsed.$$.outputfiles.txt
+rm -f /tmp/temp_html.$$.outputfiles.txt
 
 
-# ---- paste all bg logs into HTML file ----
 
 
 # ---- kill all background jobs that are still running ----
