@@ -18,7 +18,7 @@ VagrantCI is a [Continuous integration System](https://en.wikipedia.org/wiki/Con
 | Vagrant     | [https://www.vagrantup.com/] ||
 | git         | [https://en.wikipedia.org/wiki/Git_%28software%29] ||
 | circle.yml  | inside the source repository (for build commands) ||
-| Diskspace   | minimum 10GByte free ||
+| Diskspace   | minimum 20GByte free ||
 | RAM         | minimum 8GByte ||
 
 ### Installation (on Ubuntu)
@@ -49,6 +49,8 @@ your directory tree should look something like this:
 |   |-- dl
 |   |-- tools
 |   |-- Vagrantfile
+|   |-- vagrantci.bat
+|   |-- vagrantci.sh
 </pre>
 
 ### Running (the first time) [starting from $HOME]
