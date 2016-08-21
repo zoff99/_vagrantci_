@@ -110,9 +110,31 @@ function process_subkey()
 							| sed -e 's#^"##' | sed -e 's#"$##' \
 							>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_normal.txt
 					else
-						# keys
+						# -------------- keys --------------
+
+						# background:
 						cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"'][]' | jq keys[] | grep 'background' > /dev/null 2>/dev/null
 						_key_no_background=$?
+
+						# pwd:
+						cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"'][]' | jq keys[] | grep 'pwd' > /dev/null 2>/dev/null
+						_key_no_pwd=$?
+
+						if [ $_key_no_pwd -eq 0 ]; then
+							if [ $_key_no_background -eq 1 ]; then
+								echo -n 'cd ' >> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_normal.txt
+								cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq '.[].pwd' \
+									| sed -e 's#^"##' | sed -e 's#"$##' \
+									>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_normal.txt
+							else
+								echo -n 'cd ' >> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_bg.txt
+								cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq '.[].pwd' \
+									| sed -e 's#^"##' | sed -e 's#"$##' \
+									>> "$bdir"/"$mainkey"/"$subkey"/"$_cmd_count"_bg.txt
+							fi
+						fi
+
+
 						if [ $_key_no_background -eq 1 ]; then
 							# normal
 							cat /tmp/circle_yml.json | jq '.'"$mainkey"'.'"$subkey"'['"$_linenum"']' | jq keys[0] \
