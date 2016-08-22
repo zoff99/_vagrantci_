@@ -124,16 +124,15 @@ else
                                 vagrant suspend </dev/null
                                 vagrant halt --force </dev/null
 
-                                sleep 2
-
                                 echo "$vagrantci__buf"
                                 echo " ** resetting to VM snapshot vagrantci001 ** "
+                                echo " ** CI run ** "
                                 vagrant snapshot restore "vagrantci001" </dev/null
 
-                                echo "$vagrantci__buf"
-                                echo " ** CI run ** "
-                                echo ""
-                                vagrant up --provision </dev/null
+                                # echo "$vagrantci__buf"
+                                # echo ""
+                                # vagrant up --provision </dev/null
+
                                 echo "$vagrantci__footer"
                         fi
                 elif [ "$1""x" == "destroyx" ]; then

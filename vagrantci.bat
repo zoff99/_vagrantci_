@@ -99,12 +99,12 @@ GOTO :UNKNOWN
 
 		echo !vagrantci__buf!
 		echo " ** resetting to VM snapshot vagrantci001 ** "
+		echo " ** CI run ** "
 		call vagrant snapshot restore "vagrantci001"
 
-		echo !vagrantci__buf!
-		echo " ** CI run ** "
-		echo ""
-		call vagrant up --provision
+		REM echo !vagrantci__buf!
+		REM echo ""
+		REM call vagrant up --provision
 
 		echo !vagrantci__footer!
 	)
