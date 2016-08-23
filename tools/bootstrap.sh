@@ -157,6 +157,12 @@ printf '\n' | add-apt-repository ppa:cwchien/gradle >> /srv/dl/install.log 2>&1
 printf '\n' | apt-add-repository ppa:webupd8team/java >> /srv/dl/install.log 2>&1
 echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
 echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
+# add svn 1.7 repo
+# apt-key adv --keyserver keyserver.ubuntu.com --recv-key A2F4C039
+# printf '\n' | add-apt-repository ppa:svn/ppa >> /srv/dl/install.log 2>&1
+# add svn 1.8 repo
+printf '\n' | add-apt-repository ppa:dominik-stadler/subversion-1.8 >> /srv/dl/install.log 2>&1
+
 
 # --------- update index 2 ---------
 # --------- update index 2 ---------
@@ -169,6 +175,8 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y gradle-2.10 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y g++ make git curl vim htop mc zip >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
+apt-get install -m -q -y subversion >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y libc6:i386 libncurses5:i386 libstdc++6:i386 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
@@ -306,6 +314,8 @@ fi
 #  __CI_BUILDNUM
 #  __CI_BUILDNUM_M_1
 #  __REPO_USER
+#  __REPO_PASS
+#  __REPO_TYPE
 
 . /tmp/_git_vars.sh
 

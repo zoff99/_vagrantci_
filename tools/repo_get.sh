@@ -19,16 +19,55 @@
 #
 
 
-echo
-echo "---------------------------------------------------------"
-echo "---------------------------------------------------------"
-echo "GIT: clone ""$__REPO_URL"
-echo "GIT: checkout ""$__REPO_COMMITHASH"
-echo "---------------------------------------------------------"
-echo "---------------------------------------------------------"
-echo
 
-printf '. /tmp/_git_vars.sh \n git clone $__REPO_URL \n pwd \n ls -al \n cd $__REPO_BASEDIR \n git checkout $__REPO_COMMITHASH \n pwd \n ls -al \n' | su - ubuntu
+
+#  __REPO_COMMITHASH
+#  __REPO_URL
+#  __REPO_BASEDIR
+#  __CI_BUILDNUM
+#  __CI_BUILDNUM_M_1
+#  __REPO_USER
+#  __REPO_PASS
+#  __REPO_TYPE
+
+
+if [ "$__REPO_TYPE""x" == "gitx" ]; then
+
+	echo
+	echo "---------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo "GIT: clone ""$__REPO_URL"
+	echo "GIT: checkout ""$__REPO_COMMITHASH"
+	echo "---------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo
+
+	printf '. /tmp/_git_vars.sh \n git clone $__REPO_URL \n pwd \n ls -al \n cd $__REPO_BASEDIR \n git checkout $__REPO_COMMITHASH \n pwd \n ls -al \n' | su - ubuntu
+
+else
+
+	echo
+	echo "---------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo "SVN: checkout ""$__REPO_URL"
+	echo "SVN: commit# ""$__REPO_COMMITHASH"
+	echo "---------------------------------------------------------"
+	echo "---------------------------------------------------------"
+	echo
+
+
+	if [ "$__REPO_PASS""x" == "x" ]; then
+
+		printf '. /tmp/_git_vars.sh \n mkdir "$__REPO_BASEDIR" \n cd "$__REPO_BASEDIR" \n svn checkout --non-interactive --trust-server-cert "$__REPO_URL""/" ./ \n pwd \n ls -al \n' | su - ubuntu
+
+	else
+		printf '. /tmp/_git_vars.sh \n mkdir "$__REPO_BASEDIR" \n cd "$__REPO_BASEDIR" \n svn checkout --non-interactive --trust-server-cert --username="$__REPO_USER" --password='"'""$__REPO_PASS""'"' "$__REPO_URL""/" ./ \n pwd \n ls -al \n' | su - ubuntu
+
+	fi
+
+
+fi
+
 
 function yaml2json()
 {
