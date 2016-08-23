@@ -1,4 +1,5 @@
 g++
+libtool
 pkg-config
 scala
 curl
