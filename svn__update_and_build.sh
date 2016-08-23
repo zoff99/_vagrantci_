@@ -12,7 +12,7 @@ if [ "$old""x" != "$new""x" ]; then
         echo "update and run..."
         echo "============================="
         echo ""
-        svn up .. && bash vagrantci.sh
+        svn up .. && bash vagrantci.sh run
 else
         echo ""
         echo "============================="
