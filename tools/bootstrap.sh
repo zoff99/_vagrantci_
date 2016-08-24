@@ -404,6 +404,7 @@ if [ $have_apis -eq 0 ]; then
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 >> /srv/dl/install.log 2>&1
 
 	echo y | android update sdk --no-ui --all --filter android-4 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter android-7 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-8 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-9 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-10 >> /srv/dl/install.log 2>&1
