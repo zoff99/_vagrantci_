@@ -25,7 +25,7 @@ GREEN='\033[0;32m'
 delay_1=1
 delay_2=8
 
-command_chars=60
+command_chars=80
 
 timeout_value_normal="120.5m" # 2h
 timeout_value_bg="300.5m" # 5h
