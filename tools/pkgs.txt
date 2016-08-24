@@ -1,7 +1,4 @@
 g++
-libtool
-automake1.10
-autopoint
 pkg-config
 scala
 curl
