@@ -7,16 +7,16 @@ echo "old rev=""$old"
 echo "new rev=""$new"
 
 if [ "$old""x" != "$new""x" ]; then
-        echo ""
-        echo "============================="
-        echo "update and run..."
-        echo "============================="
-        echo ""
-        svn up .. && bash vagrantci.sh run
+	echo ""
+	echo "============================="
+	echo "update and run..."
+	echo "============================="
+	echo ""
+	svn up .. && bash vagrantci.sh run
 else
-        echo ""
-        echo "============================="
-        echo "no update"
-        echo "============================="
-        echo ""
+	echo ""
+	echo "============================="
+	echo "no update"
+	echo "============================="
+	echo ""
 fi
