@@ -104,7 +104,11 @@ fi
 #----------
 # sync time once
 #----------
-service ntp stop; sleep 1;ntpdate pool.ntp.org;service ntp start ; ntpq -p
+service ntp stop >> /srv/dl/install.log 2>&1
+sleep 1
+ntpdate pool.ntp.org >> /srv/dl/install.log 2>&1
+service ntp start >> /srv/dl/install.log 2>&1
+ntpq -p >> /srv/dl/install.log 2>&1
 
 
 #----------
