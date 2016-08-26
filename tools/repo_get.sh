@@ -77,7 +77,8 @@ function yaml2json()
 
 ci_json="/tmp/circle_yml.json"
 rm -f "$ci_json"
-yaml2json /code_base/circle.yml > "$ci_json"
+# yaml2json /code_base/circle.yml > "$ci_json"
+yaml2json /home/ubuntu/"$__REPO_BASEDIR" > "$ci_json"
 
 ci_cache_dirs="/srv/dl/ci_cache_dirs.txt"
 ci_cache_datadir="/srv/dl/"
