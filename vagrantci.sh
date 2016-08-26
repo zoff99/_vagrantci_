@@ -128,33 +128,6 @@ else
                                 echo " ** resetting to VM snapshot vagrantci001 ** "
                                 echo " ** CI run ** "
                                 vagrant snapshot restore "vagrantci001" </dev/null
-                                res1=$?
-
-                                if [ $res1 -ne 0 ]; then
-                                        echo ""
-                                        echo " ++ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "
-                                        echo " ++ "
-                                        echo " ++     ERROR "
-                                        echo " ++ "
-                                        echo " ++ -- retrying -- "
-                                        echo " ++ "
-                                        echo " ++ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! "
-
-                                        echo "$vagrantci__buf"
-                                        echo " ** wait a bit ** "
-                                        sleep 120
-
-                                        echo "$vagrantci__header"
-                                        echo " ** halting VM ** "
-                                        vagrant suspend </dev/null
-                                        vagrant halt --force </dev/null
-
-                                        echo "$vagrantci__buf"
-                                        echo " ** resetting to VM snapshot vagrantci001 ** "
-                                        echo " ** CI run ** "
-                                        vagrant snapshot restore "vagrantci001" </dev/null
-                                fi
-
                                 echo "$vagrantci__footer"
                         fi
                 elif [ "$1""x" == "destroyx" ]; then
