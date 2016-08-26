@@ -101,6 +101,10 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 fi
 
+#----------
+# sync time once
+#----------
+service ntp stop; sleep 1;ntpdate pool.ntp.org;service ntp start ; ntpq -p
 
 
 #----------
