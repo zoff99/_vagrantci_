@@ -22,7 +22,7 @@ NC='\033[0m' # No Color
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 
-delay_1=1
+delay_1=0
 delay_2=8
 
 command_chars=80
