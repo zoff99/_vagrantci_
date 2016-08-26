@@ -247,7 +247,6 @@ if [ $level_0_keys > 0 ]; then
 
 					if [ "$_java_version""x" == "oraclejdk8x" ]; then
 						echo "     * oraclejdk8"
-						apt-get install oracle-java8-installer >>/tmp/jdk8.log 2>/tmp/jdk8.log
 						update-alternatives --set java /usr/lib/jvm/java-8-oracle/jre/bin/java >>/tmp/jdk8.log 2>/tmp/jdk8.log
 						update-alternatives --set javac /usr/lib/jvm/java-8-oracle/bin/javac >>/tmp/jdk8.log 2>/tmp/jdk8.log
 					fi

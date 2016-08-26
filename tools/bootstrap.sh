@@ -194,12 +194,14 @@ apt-get install -m -q -y libiconv-hook-dev gettext libsaxonb-java >> /srv/dl/ins
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y libz-dev libz-dev:i386 libz1 libz1:i386 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
+apt-get install -m -q -y oracle-java8-installer >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 ## large package list ##
 cat /srv/tools/pkgs.txt | xargs -L10 apt-get -m -q -y install >> /srv/dl/install.log 2>&1
 ## large package list ##
 
-# set java to 1.7 again (gradle moves it back to 1.6)
+# set java to 1.7 again (gradle moves it back to 1.6) [jdk sets it to 1.8]
 update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java >> /srv/dl/install.log 2>&1
 update-alternatives --set javac /usr/lib/jvm/java-7-openjdk-amd64/bin/javac >> /srv/dl/install.log 2>&1
 
