@@ -189,24 +189,24 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 
 
 # ---- kill all background jobs that are still running ----
+if [ "$kill_all_bg_procs""x" == "1x" ]; then
+        if [ "`cat "$pids" 2>/dev/null|grep -v '^$'|wc -l`""x" != "0x" ]; then
+                echo
+                echo "========== INFO ==========="
+                echo "-- bg jobs still running --"
+                cat "$pids" 2>/dev/null
+                echo "-- bg jobs still running --"
 
-if [ "`cat "$pids" 2>/dev/null|grep -v '^$'|wc -l`""x" != "0x" ]; then
-	echo
-	echo "========== INFO ==========="
-	echo "-- bg jobs still running --"
-	cat "$pids" 2>/dev/null
-	echo "-- bg jobs still running --"
+                # -- first kill all childs
+                cat "$pids" | xargs -L1 pkill -P > /dev/null 2> /dev/null
+                cat "$pids" | xargs -L1 pkill -9 -P > /dev/null 2> /dev/null
+                # -- now kill processes itself
+                cat "$pids" | xargs -L1 pkill > /dev/null 2> /dev/null
+                cat "$pids" | xargs -L1 pkill -9 > /dev/null 2> /dev/null
 
-	# -- first kill all childs
-	cat "$pids" | xargs -L1 pkill -P > /dev/null 2> /dev/null
-	cat "$pids" | xargs -L1 pkill -9 -P > /dev/null 2> /dev/null
-	# -- now kill processes itself
-	cat "$pids" | xargs -L1 pkill > /dev/null 2> /dev/null
-	cat "$pids" | xargs -L1 pkill -9 > /dev/null 2> /dev/null
-
-	echo "========== INFO ==========="
-	echo
-
+                echo "========== INFO ==========="
+                echo
+        fi
 fi
 # ---- kill all background jobs that are still running ----
 
