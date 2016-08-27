@@ -6,3 +6,7 @@ npm
 firefox
 python-pip
 libperl-dev
+gdb
+lsof
+nano
+vim
