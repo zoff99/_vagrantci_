@@ -221,9 +221,16 @@ _exit_code_=0
 echo $_must_exit_ > /tmp/_must_exit_
 echo $_exit_code_ > /tmp/_exit_code_
 
+echo 0 > /tmp/_test_failed_
+
 
 sync_install_log_
 
+
+function set_test_failed()
+{
+	echo 1 > /tmp/_test_failed_
+}
 
 function exit2()
 {
@@ -326,6 +333,8 @@ cat "$tmpf" | while read _cmdfile; do
 				export _must_exit_
 				export _exit_code_
 				exit2 $excode
+			else
+				set_test_failed
 			fi
 		fi
 	else
@@ -373,6 +382,10 @@ function sync_and_check_exit()
 	fi
 }
 
+# ---------- restore cache ----------
+bash -x "$bdir"/dependencies/cache_directories/1_all_dirs.txt
+# ---------- restore cache ----------
+
 run_test_group "dependencies" "pre" "ex_yes"
 sync_and_check_exit
 
@@ -381,6 +394,14 @@ sync_and_check_exit
 
 run_test_group "test" "override" "x"
 sync_and_check_exit
+
+# ---------- save cache (only if no errors occured) ----------
+export _test_failed_=`cat /tmp/_test_failed_`
+if [ ${_test_failed_} -eq 0 ]; then
+	bash -x "$bdir"/dependencies/cache_directories/0_new_dirs.txt
+fi
+# ---------- save cache (only if no errors occured) ----------
+
 
 clean_up
 

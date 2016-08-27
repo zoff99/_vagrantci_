@@ -81,6 +81,8 @@ rm -f "$ci_json"
 yaml2json /home/ubuntu/"$__REPO_BASEDIR"/circle.yml > "$ci_json"
 
 ci_cache_dirs="/srv/dl/ci_cache_dirs.txt"
+ci_cache_dirs2="/srv/dl/ci_cache_dirs2.txt"
+ci_cache_dirs3="/srv/dl/ci_cache_dirs3.txt"
 ci_cache_datadir="/srv/dl/"
 
 ################## dirs ##################
@@ -271,6 +273,8 @@ if [ $level_0_keys > 0 ]; then
 			if [ $res -eq 0 ]; then
 				echo "   * cache_directories"
 
+				mv "$ci_cache_dirs" "$ci_cache_dirs2" > /dev/null 2> /dev/null
+
 				cat /tmp/circle_yml.json | jq '.dependencies.cache_directories[]' | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
 					echo "     * ""$_key"
 
@@ -280,6 +284,11 @@ if [ $level_0_keys > 0 ]; then
 						echo "     = cache dir:""$_key"
 						_cache_data_file=`cat "$ci_cache_dirs" 2> /dev/null | grep '^'"$_key"':' | cut -d':' -f2`
 						echo "       ""$_cache_data_file"
+
+						# mark found dir -------
+						cat "$ci_cache_dirs2" 2> /dev/null | grep -v '^'"$_key"':' > "$ci_cache_dirs3" 2>/dev/null
+						mv "$ci_cache_dirs3" "$ci_cache_dirs2"
+						# mark found dir -------
 					else
 						echo "     + new cache dir:""$_key"
 						_d_=`date`
@@ -293,6 +302,20 @@ if [ $level_0_keys > 0 ]; then
 					echo 'cd '"$_key"'/../ ; tar -xvf '"$_cache_data_file" >> "$bdir"/dependencies/cache_directories/1_all_dirs.txt
 
 				done
+
+				# remove old cache files that are not in circle.yml anymore
+				cat "$ci_cache_dirs2" 2> /dev/null | grep '^'"$_key"':' > /dev/null 2>/dev/null
+				res=$?
+				if [ $res -eq 0 ]; then
+					cat "$ci_cache_dirs2" 2> /dev/null | cut -d':' -f2 2>/dev/null | while read _key ; do
+						# remove cache file
+						echo rm -v "$_key"
+						# remove entry from list file
+						cat "$ci_cache_dirs" 2> /dev/null | grep -v ':'"$_key"'$' > "$ci_cache_dirs3" 2>/dev/null
+						mv "$ci_cache_dirs3" "$ci_cache_dirs"
+					done
+				fi
+
 
 			fi
 
