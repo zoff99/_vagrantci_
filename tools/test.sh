@@ -23,7 +23,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 
 delay_1=0
-delay_2=8
+delay_2=1
 
 command_chars=80
 
