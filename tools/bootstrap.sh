@@ -104,6 +104,7 @@ fi
 #----------
 # sync time once
 #----------
+ntpq -p >> /srv/dl/install.log 2>&1
 service ntp stop >> /srv/dl/install.log 2>&1
 sleep 1
 ntpdate pool.ntp.org >> /srv/dl/install.log 2>&1
