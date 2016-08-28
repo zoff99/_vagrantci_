@@ -189,6 +189,7 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 
 
 # ---- kill all background jobs that are still running ----
+kill_all_bg_procs="1"
 if [ "$kill_all_bg_procs""x" == "1x" ]; then
         if [ "`cat "$pids" 2>/dev/null|grep -v '^$'|wc -l`""x" != "0x" ]; then
                 echo
