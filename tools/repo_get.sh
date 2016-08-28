@@ -276,7 +276,7 @@ if [ $level_0_keys > 0 ]; then
 
 				echo "   * cache_directories"
 
-				mv "$ci_cache_dirs" "$ci_cache_dirs2" > /dev/null 2> /dev/null
+				cp -v "$ci_cache_dirs" "$ci_cache_dirs2" > /dev/null 2> /dev/null
 
 				cat /tmp/circle_yml.json | jq '.dependencies.cache_directories[]' | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
 					echo "     * ""$_key"
