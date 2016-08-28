@@ -302,7 +302,7 @@ if [ $level_0_keys > 0 ]; then
 						echo 'cd '"$_key"'/../ && tar -cvf '"$ci_cache_datadir"'/'"$_cache_data_file"'.tar'' '"$b_key" >> "$bdir"/dependencies/cache_directories/0_new_dirs.txt
 					fi
 
-					echo 'mkdir -p '"$_key"' && cd '"$_key"'/../ && tar -xvf '"$ci_cache_datadir"'/'"$_cache_data_file"'.tar' >> "$bdir"/dependencies/cache_directories/1_all_dirs.txt
+					echo 'mkdir -p '"$_key"' && cd '"$_key"'/../ && tar -xvf '"$_cache_data_file" >> "$bdir"/dependencies/cache_directories/1_all_dirs.txt
 
 				done
 
