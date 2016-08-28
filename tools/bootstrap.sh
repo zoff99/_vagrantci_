@@ -161,6 +161,16 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y python-software-properties >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
+
+# add repos ------------------
+echo 'deb http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
+echo 'deb-src http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
+echo 'deb http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
+echo 'deb-src http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192
+# add repos ------------------
+
+
 # add gradle repo
 printf '\n' | add-apt-repository ppa:cwchien/gradle >> /srv/dl/install.log 2>&1
 # add jdk1.8 repo
