@@ -104,6 +104,7 @@ fi
 #----------
 # sync time once
 #----------
+echo "sync system time..."
 ntpq -p >> /srv/dl/install.log 2>&1
 service ntp stop >> /srv/dl/install.log 2>&1
 sleep 1
