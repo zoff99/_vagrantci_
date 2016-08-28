@@ -397,9 +397,9 @@ sync_and_check_exit
 
 # ---------- save cache (only if no errors occured) ----------
 export _test_failed_=`cat /tmp/_test_failed_`
-if [ ${_test_failed_} -eq 0 ]; then
+#if [ ${_test_failed_} -eq 0 ]; then
 	bash -x "$bdir"/dependencies/cache_directories/0_new_dirs.txt
-fi
+#fi
 # ---------- save cache (only if no errors occured) ----------
 
 
