@@ -520,6 +520,7 @@ export _exit_code_=`cat /tmp/_exit_code_`
 sync_install_log_
 
 if [ "$_must_exit_""x" != "0x" ];then
+	:
 	# ------------------------------------------------------
 	# we always exit with "0", show errors some other way!!
 	# ------------------------------------------------------
