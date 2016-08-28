@@ -271,6 +271,9 @@ if [ $level_0_keys > 0 ]; then
 			cat /tmp/circle_yml.json | jq '.dependencies'|jq keys[] | grep 'cache_directories' > /dev/null 2> /dev/null
 			res=$?
 			if [ $res -eq 0 ]; then
+
+				set -x
+
 				echo "   * cache_directories"
 
 				mv "$ci_cache_dirs" "$ci_cache_dirs2" > /dev/null 2> /dev/null
@@ -317,6 +320,8 @@ if [ $level_0_keys > 0 ]; then
 				fi
 				rm -f "$ci_cache_dirs2" 2> /dev/null
 				rm -f "$ci_cache_dirs3" 2> /dev/null
+
+				set +x
 
 			fi
 
