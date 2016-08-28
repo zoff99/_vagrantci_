@@ -296,26 +296,27 @@ if [ $level_0_keys > 0 ]; then
 						echo "$_key"':'"$ci_cache_datadir"'/'"$_cache_data_file"'.tar' >> "$ci_cache_dirs"
 
 						b_key=`basename "$_key"`
-						echo 'cd '"$_key"'/../ && tar -cvf '"$_cache_data_file"' '"$b_key" >> "$bdir"/dependencies/cache_directories/0_new_dirs.txt
+						echo 'cd '"$_key"'/../ && tar -cvf '"$ci_cache_datadir"'/'"$_cache_data_file"' '"$b_key" >> "$bdir"/dependencies/cache_directories/0_new_dirs.txt
 					fi
 
-					echo 'mkdir -p '"$_key"' && cd '"$_key"'/../ && tar -xvf '"$_cache_data_file" >> "$bdir"/dependencies/cache_directories/1_all_dirs.txt
+					echo 'mkdir -p '"$_key"' && cd '"$_key"'/../ && tar -xvf '"$ci_cache_datadir"'/'"$_cache_data_file" >> "$bdir"/dependencies/cache_directories/1_all_dirs.txt
 
 				done
 
 				# remove old cache files that are not in circle.yml anymore
-				cat "$ci_cache_dirs2" 2> /dev/null | grep '^'"$_key"':' > /dev/null 2>/dev/null
+				cat "$ci_cache_dirs2" 2> /dev/null | grep ':' > /dev/null 2>/dev/null
 				res=$?
 				if [ $res -eq 0 ]; then
 					cat "$ci_cache_dirs2" 2> /dev/null | cut -d':' -f2 2>/dev/null | while read _key ; do
 						# remove cache file
 						echo rm -v "$_key"
 						# remove entry from list file
-						cat "$ci_cache_dirs" 2> /dev/null | grep -v ':'"$_key"'$' > "$ci_cache_dirs3" 2>/dev/null
+						cat "$ci_cache_dirs" 2> /dev/null | grep -v "$_key" > "$ci_cache_dirs3" 2>/dev/null
 						mv "$ci_cache_dirs3" "$ci_cache_dirs"
 					done
 				fi
-
+				rm -f "$ci_cache_dirs2" 2> /dev/null
+				rm -f "$ci_cache_dirs3" 2> /dev/null
 
 			fi
 
