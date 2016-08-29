@@ -80,6 +80,10 @@ rm -f "$ci_json"
 # yaml2json /code_base/circle.yml > "$ci_json"
 yaml2json /home/ubuntu/"$__REPO_BASEDIR"/circle.yml > "$ci_json"
 
+## --- workaround a bug ---
+sed -i -e 's#dpkg --foreign-architecture#dpkg --add-architecture#g' "$ci_json"
+## --- workaround a bug ---
+
 ci_cache_dirs="/srv/dl/ci_cache_dirs.txt"
 ci_cache_dirs2="/srv/dl/ci_cache_dirs2.txt"
 ci_cache_dirs3="/srv/dl/ci_cache_dirs3.txt"

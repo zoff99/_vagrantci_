@@ -167,13 +167,13 @@ echo 'deb http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sourc
 echo 'deb-src http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
 echo 'deb http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
 echo 'deb-src http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
-apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192
+apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192 >> /srv/dl/install.log 2>&1
 # add repos ------------------
 
 
 # add repos ------------------
-mkdir -p /etc/apt/sources.list.d/
-touch /etc/apt/sources.list.d/vagrantci.list
+mkdir -p /etc/apt/sources.list.d/ >> /srv/dl/install.log 2>&1
+touch /etc/apt/sources.list.d/vagrantci.list >> /srv/dl/install.log 2>&1
 
 echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
 echo "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
@@ -187,10 +187,10 @@ echo "deb http://archive.ubuntu.com/ubuntu/ precise-backports main universe" >> 
 echo "deb http://packages.couchbase.com/preview/ubuntu lucid lucid/main" >> /etc/apt/sources.list.d/vagrantci.list
 echo "deb http://debian.datastax.com/community stable main" >> /etc/apt/sources.list.d/vagrantci.list
 
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A3FAA648D9223EDA
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
-apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 350200F2B999A372
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F >> /srv/dl/install.log 2>&1
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A3FAA648D9223EDA >> /srv/dl/install.log 2>&1
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32 >> /srv/dl/install.log 2>&1
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 350200F2B999A372 >> /srv/dl/install.log 2>&1
 # add repos ------------------
 
 
@@ -246,6 +246,10 @@ apt-get install -m -q -y libz-dev libz-dev:i386 libz1 libz1:i386 >> /srv/dl/inst
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y oracle-java8-installer >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
+
+## -- update the dpkg binary --
+apt-get install dpkg >> /srv/dl/install.log 2>&1
+## -- update the dpkg binary --
 
 ## large package list ##
 cat /srv/tools/pkgs.txt | xargs -L10 apt-get -m -q -y install >> /srv/dl/install.log 2>&1
