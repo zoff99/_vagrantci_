@@ -557,7 +557,7 @@ echo "running tests..."
 ######## TEST ########
 ######## TEST ########
 
-printf "cd $CIRCLE_PROJECT_REPONAME"' \n /bin/bash -c /srv/tools/test.sh \n' | su - ubuntu 2>&1 | tee -a /srv/dl/install.log
+printf "cd $CIRCLE_PROJECT_REPONAME"' \n /bin/bash /srv/tools/test.sh \n' | su - ubuntu 2>&1 | tee -a /srv/dl/install.log
 
 export _must_exit_=`cat /tmp/_must_exit_`
 export _exit_code_=`cat /tmp/_exit_code_`
