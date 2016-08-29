@@ -171,6 +171,29 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192
 # add repos ------------------
 
 
+# add repos ------------------
+mkdir -p /etc/apt/sources.list.d/
+touch /etc/apt/sources.list.d/vagrantci.list
+
+echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://security.ubuntu.com/ubuntu precise-security main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb-src http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://archive.ubuntu.com/ubuntu trusty main" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://archive.ubuntu.com/ubuntu/ trusty-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://archive.ubuntu.com/ubuntu/ precise-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://packages.couchbase.com/preview/ubuntu lucid lucid/main" >> /etc/apt/sources.list.d/vagrantci.list
+echo "deb http://debian.datastax.com/community stable main" >> /etc/apt/sources.list.d/vagrantci.list
+
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys A3FAA648D9223EDA
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 3B4FE6ACC0B21F32
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 350200F2B999A372
+# add repos ------------------
+
+
 # add gradle repo
 printf '\n' | add-apt-repository ppa:cwchien/gradle >> /srv/dl/install.log 2>&1
 # add jdk1.8 repo
