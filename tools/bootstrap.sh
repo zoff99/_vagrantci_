@@ -194,17 +194,24 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 350200F2B999A372
 # add repos ------------------
 
 
-# add gradle repo
+# add gradle repo --------
 printf '\n' | add-apt-repository ppa:cwchien/gradle >> /srv/dl/install.log 2>&1
-# add jdk1.8 repo
+# add gradle repo --------
+
+# add jdk1.8 repo --------
 printf '\n' | apt-add-repository ppa:webupd8team/java >> /srv/dl/install.log 2>&1
 echo debconf shared/accepted-oracle-license-v1-1 select true | debconf-set-selections
 echo debconf shared/accepted-oracle-license-v1-1 seen true | debconf-set-selections
-# add svn 1.7 repo
+# add jdk1.8 repo --------
+
+# add svn 1.7 repo -------
 # apt-key adv --keyserver keyserver.ubuntu.com --recv-key A2F4C039
 # printf '\n' | add-apt-repository ppa:svn/ppa >> /srv/dl/install.log 2>&1
-# add svn 1.8 repo
+# add svn 1.7 repo -------
+
+# add svn 1.8 repo -------
 printf '\n' | add-apt-repository ppa:dominik-stadler/subversion-1.8 >> /srv/dl/install.log 2>&1
+# add svn 1.8 repo -------
 
 
 # --------- update index 2 ---------
@@ -244,9 +251,10 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 cat /srv/tools/pkgs.txt | xargs -L10 apt-get -m -q -y install >> /srv/dl/install.log 2>&1
 ## large package list ##
 
-# set java to 1.7 again (gradle moves it back to 1.6) [jdk sets it to 1.8]
+# set java to 1.7 again (gradle moves it back to 1.6) [jdk sets it to 1.8] -----------
 update-alternatives --set java /usr/lib/jvm/java-7-openjdk-amd64/jre/bin/java >> /srv/dl/install.log 2>&1
 update-alternatives --set javac /usr/lib/jvm/java-7-openjdk-amd64/bin/javac >> /srv/dl/install.log 2>&1
+# ------------------------------------------------------------------------------------
 
 
 update-locale LANG=en_US.UTF-8 LC_MESSAGES=POSIX >> /srv/dl/install.log 2>&1
@@ -545,7 +553,7 @@ echo "running tests..."
 ######## TEST ########
 ######## TEST ########
 
-printf "cd $CIRCLE_PROJECT_REPONAME"' \n chmod a+rx /srv/tools/test.sh \n /srv/tools/test.sh \n' | su - ubuntu 2>&1 | tee -a /srv/dl/install.log
+printf "cd $CIRCLE_PROJECT_REPONAME"' \n /bin/bash -c /srv/tools/test.sh \n' | su - ubuntu 2>&1 | tee -a /srv/dl/install.log
 
 export _must_exit_=`cat /tmp/_must_exit_`
 export _exit_code_=`cat /tmp/_exit_code_`
