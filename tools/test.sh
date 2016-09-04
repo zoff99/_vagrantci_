@@ -504,7 +504,7 @@ cat "$tmpf" | while read _cmdfile; do
 		# echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
-		echo -n "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
