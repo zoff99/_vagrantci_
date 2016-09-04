@@ -149,11 +149,11 @@ else
                                         vagrant suspend </dev/null
                                         vagrant halt --force </dev/null
 
-										echo "$vagrantci__buf"
-										echo " ** resetting to VM snapshot vagrantci001 ** "
-										echo " ** CI run ** "
-										vagrant snapshot restore "vagrantci001" </dev/null
-								fi
+					echo "$vagrantci__buf"
+					echo " ** resetting to VM snapshot vagrantci001 ** "
+					echo " ** CI run ** "
+					vagrant snapshot restore "vagrantci001" </dev/null
+				fi
 
                                 echo "$vagrantci__footer"
                         fi
