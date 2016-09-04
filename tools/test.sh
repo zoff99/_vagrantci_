@@ -76,7 +76,7 @@ summary.blue {
 }
 
 code {
-  white-space: pre;  
+  white-space: pre;
 }
 
 .codebox {
@@ -190,7 +190,13 @@ echo '<a class="repo_url" href="' >> "$CIRCLE_ARTIFACTS"/index.html
 echo "$CIRCLE_REPOSITORY_URL" >> "$CIRCLE_ARTIFACTS"/index.html
 echo '">repository URL</a><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
-echo '<br><br><div class="resultbox_@@::++RED_GREEN_all++::@@"><div class="float_left">@@::++RESULT_BOX++::@@</div><div class="float_right">@@::++RESULT_TIME++::@@</div></div>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '<br><br><div class="
+@@::++RED_GREEN_all++::@@
+"><div class="float_left">
+@@::++RESULT_BOX++::@@
+</div><div class="float_right">
+@@::++RESULT_TIME++::@@
+</div></div>' >> "$CIRCLE_ARTIFACTS"/index.html
 
 echo '<br><br><div class="output_files">' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@' >> "$CIRCLE_ARTIFACTS"/index.html
@@ -210,6 +216,7 @@ function clean_up()
 sync_install_log_
 
 # ---- paste all bg logs into HTML file ----
+
 bg_count=`cat "$CIRCLE_ARTIFACTS"/index.html | grep '@@%%::' | wc -l | tr -d ' '`
 bb_count=0
 
@@ -274,9 +281,9 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 replace_with="/tmp/replace_with.$$.txt"
 rm -f "$replace_with"
 if [ $_exit_code_ -ne 0 ]; then
-	echo -n 'red' > "$replace_with"
+	echo -n 'resultbox_red' > "$replace_with"
 else
-	echo -n 'green' > "$replace_with"
+	echo -n 'resultbox_green' > "$replace_with"
 fi
 echo '/@@::++RED_GREEN_all++::@@/ {
 r '"${replace_with}"'
@@ -308,8 +315,11 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 rm -f "$replace_with"
 
 
+END_TIME_OVERALL=$(date +%s)
+END_TIME_STRING_FORMATTED=`echo $((END_TIME_OVERALL-START_TIME_OVERALL)) | awk '{printf "%d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}' 2>/dev/null | tr -d '\r'| tr -d '\n'`
+
 rm -f "$replace_with"
-echo -n '[00:00:00]' > "$replace_with"
+echo -n '['"$END_TIME_STRING_FORMATTED"']' > "$replace_with"
 echo '/@@::++RESULT_TIME++::@@/ {
 r '"${replace_with}"'
 d
@@ -526,8 +536,11 @@ function sync_and_check_exit()
 	fi
 }
 
+
+export START_TIME_OVERALL=$(date +%s)
+
 # ---------- restore cache ----------
-bash -x "$bdir"/dependencies/cache_directories/1_all_dirs.txt
+bash "$bdir"/dependencies/cache_directories/1_all_dirs.txt
 # ---------- restore cache ----------
 
 run_test_group "dependencies" "pre" "ex_yes"
@@ -542,7 +555,7 @@ sync_and_check_exit
 # ---------- save cache (only if no errors occured) ----------
 export _test_failed_=`cat /tmp/_test_failed_`
 #if [ ${_test_failed_} -eq 0 ]; then
-	bash -x "$bdir"/dependencies/cache_directories/0_new_dirs.txt
+	bash "$bdir"/dependencies/cache_directories/0_new_dirs.txt
 #fi
 # ---------- save cache (only if no errors occured) ----------
 
