@@ -46,38 +46,51 @@ rm -f "$pids"
 html_template_001='<HTML>
 <head>
 <style>
-pre {
-    font-size:small;
-	font-family: "Lucida Console", Monaco, monospace;
-}
-
 summary {
-    font-size:large;
-	font-family: "Lucida Console", Monaco, monospace;
-	color:Black;
+  font-size: large;
+  font-family: "Lucida Console", Monaco, monospace;
+  color: Black;
+  margin: 0.2cm 0.2cm 0cm 0.2cm;
 }
 
-div.grey{
-	background-color: LightGrey;
+div.grey {
+  background-color: LightGrey;
+  padding: 0.45cm 0.2cm 0.2cm 0.2cm;
 }
 
-summary.red{
-	background-color: Red;
-	border:2px dotted Black;
+summary.red {
+  background-color: #ed5c5c;
+  border: 2px dotted Black;
 }
 
-summary.green{
-	background-color: LightGreen;
-	border:2px dotted Green;
+summary.green {
+  background-color: #52c86a;
+  border: 2px dotted Green;
 }
 
-summary.blue{
-	background-color: LightBlue;
-	border:2px dotted Black;
+summary.blue {
+  background-color: LightBlue;
+  border: 2px dotted Black;
 }
 
+.codebox {
+  border: 4px solid lightgrey;
+  background-color: #212121;
+  Xwidth: 300px;
+  overflow: auto;
+  color: #ededed;
+  Xfont-family: verdana;
+  font-size: large;
+  padding: 0.4cm 0.4cm 0.4cm 0.4cm;
+  margin: 0px 0.2cm 0.2cm 0.2cm;
+}
+
+.hor_spacer {
+  margin: 0.2cm;
+}
 </style>
 </head>
+<BODY style="background-color:#eeeeee;">
 '
 
 html_template_cmd_head_1a='<details>
@@ -88,26 +101,24 @@ html_template_cmd_head_1a='<details>
 html_template_cmd_head_1b='</div></summary>
 '
 
-html_template_cmd_command_1='
-<p><pre>'
+# html_template_cmd_command_1='
+# <p class="codebox"><code>'
+#
+# html_template_cmd_command_2='</code><p><HR>
+# '
 
-html_template_cmd_command_2='</pre><p><HR>
-'
+html_template_cmd_log_1='
+<p class="codebox"><code>'
 
-
-
-html_template_cmd_log_1='<p>
-<pre>'
-
-html_template_cmd_log_2='</pre>
-</p>
+html_template_cmd_log_2='</code><p>
 '
 
 html_template_cmd_head_2='</details>
-<BR>
+<div class="hor_spacer"></div>
 '
 
-html_template_099='</HTML>
+html_template_099='</BODY>
+</HTML>
 '
 
 html_template_output_files_1='<a href="'
@@ -306,15 +317,15 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
-		cat "$_c2" |head -4 | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_head_1b" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# rm -f "/tmp/xyz.txt"
+		# cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		# echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		# cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		# echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		# ------- log -------
@@ -365,15 +376,15 @@ cat "$tmpf" | while read _cmdfile; do
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
 
-		cat "$_c2" |head -4 | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_head_1b" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
-		rm -f "/tmp/xyz.txt"
-		cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
-		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
-		echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
+		# rm -f "/tmp/xyz.txt"
+		# cat "$_c2" | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
+		# echo "$html_template_cmd_command_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		# cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
+		# echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
 		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
