@@ -203,6 +203,21 @@ echo '@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
 
+# ----- attach circle.yml -----
+echo '<details>
+<summary class="blue">&nbsp;circle.yml&nbsp;</summary>
+<p class="codebox"><code>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+cat /home/ubuntu/"$__REPO_BASEDIR"/circle.yml | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+
+echo '</code><p>
+</details>
+<div class="hor_spacer"></div>
+' >> "$CIRCLE_ARTIFACTS"/index.html
+# ----- attach circle.yml -----
+
+
+
 function sync_install_log_()
 {
 	# sync install.log
