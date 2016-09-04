@@ -148,7 +148,7 @@ code {
 }
 
 .hor_spacer {
-  margin: 0.2cm;
+  margin: 0.4cm;
 }
 </style>
 
@@ -161,8 +161,7 @@ code {
 
 html_template_cmd_head_1a='<details>
 <summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@
-<BR>
-<div><pre class="grey"><code class="bash">'
+<BR><div><pre class="grey"><code class="bash">'
 
 html_template_cmd_head_1b='</code></pre></div></summary>
 '
