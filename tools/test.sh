@@ -151,6 +151,10 @@ code {
   margin: 0.2cm;
 }
 </style>
+
+<link rel="stylesheet" href="/styles/railscasts.css">
+<script src="/styles/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head>
 <BODY style="background-color:#eeeeee;">
 '
@@ -158,9 +162,9 @@ code {
 html_template_cmd_head_1a='<details>
 <summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@
 <BR>
-<div class="grey">'
+<div><pre class="grey"><code class="bash">'
 
-html_template_cmd_head_1b='</div></summary>
+html_template_cmd_head_1b='</code></pre></div></summary>
 '
 
 html_template_cmd_log_1='
@@ -206,11 +210,11 @@ echo '</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 # ----- attach circle.yml -----
 echo '<details>
 <summary class="blue">&nbsp;circle.yml&nbsp;</summary>
-<p class="codebox"><code>' >> "$CIRCLE_ARTIFACTS"/index.html
+<p><pre class="codebox"><code class="yaml">' >> "$CIRCLE_ARTIFACTS"/index.html
 
 cat /home/ubuntu/"$CIRCLE_PROJECT_REPONAME"/circle.yml | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
 
-echo '</code><p>
+echo '</code></pre><p>
 </details>
 <div class="hor_spacer"></div>
 ' >> "$CIRCLE_ARTIFACTS"/index.html
