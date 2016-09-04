@@ -57,7 +57,7 @@ summary {
 
 div.grey {
   background-color: LightGrey;
-  padding: 0.45cm 0.2cm 0.2cm 0.2cm;
+  padding: 0.2cm 0.2cm 0.2cm 0.2cm;
 }
 
 summary.red {
