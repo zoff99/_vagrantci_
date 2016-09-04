@@ -82,13 +82,69 @@ code {
 .codebox {
   border: 4px solid lightgrey;
   background-color: #212121;
-  Xwidth: 300px;
   overflow: auto;
   color: #ededed;
   Xfont-family: verdana;
   font-size: large;
   padding: 0.4cm 0.4cm 0.4cm 0.4cm;
   margin: 0px 0.2cm 0.2cm 0.2cm;
+}
+
+.resultbox_green {
+  display:table;
+  margin: auto;
+  width: 98%;
+  background-color: #52c86a;
+  font-size: large;
+  font-family: "Lucida Console", Monaco, monospace;
+  color: Black;
+  padding: 10px;
+}
+
+.resultbox_red {
+  display:table;
+  margin: auto;
+  width: 98%;
+  background-color: #ed5c5c;
+  font-size: large;
+  font-family: "Lucida Console", Monaco, monospace;
+  color: Black;
+  padding: 10px;
+}
+
+.float_left {
+  float: left;
+  margin: 0cm;
+  padding: 10px;
+}
+
+.float_right {
+  float: right;
+  margin: 0cm;
+  padding: 10px;
+}
+
+.output_files {
+  border: 4px solid lightgrey;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: normal;
+  padding: 0.4cm 0.4cm 0.4cm 0.4cm;
+  margin: 0px 0.2cm 0.2cm 0.2cm;
+}
+
+.repo_url {
+  border: 4px solid lightgrey;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: normal;
+  padding: 0.4cm 0.4cm 0.4cm 0.4cm;
+  margin: 0px 0.2cm 0.2cm 0.2cm;
+}
+
+.head_line {
+  font-size:x-large;
+  font-weight: bold;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #000000;
 }
 
 .hor_spacer {
@@ -106,12 +162,6 @@ html_template_cmd_head_1a='<details>
 
 html_template_cmd_head_1b='</div></summary>
 '
-
-# html_template_cmd_command_1='
-# <p class="codebox"><code>'
-#
-# html_template_cmd_command_2='</code><p><HR>
-# '
 
 html_template_cmd_log_1='
 <p class="codebox"><code>'
@@ -135,12 +185,14 @@ html_template_output_files_3='</a><BR>'
 rm -f "$CIRCLE_ARTIFACTS"/index.html
 echo "$html_template_001" >> "$CIRCLE_ARTIFACTS"/index.html
 
-echo '<br><div align="center"><H2>VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #'"$CIRCLE_BUILD_NUM"'</H2></div><br>' >> "$CIRCLE_ARTIFACTS"/index.html
-echo '<a href="' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '<br><div align="center" class="head_line">VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #'"$CIRCLE_BUILD_NUM"'</div><br>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '<a class="repo_url" href="' >> "$CIRCLE_ARTIFACTS"/index.html
 echo "$CIRCLE_REPOSITORY_URL" >> "$CIRCLE_ARTIFACTS"/index.html
 echo '">repository URL</a><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
-echo '<br><br><div>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '<br><br><div class="resultbox_@@::++RED_GREEN_all++::@@"><div class="float_left">@@::++RESULT_BOX++::@@</div><div class="float_right">@@::++RESULT_TIME++::@@</div></div>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+echo '<br><br><div class="output_files">' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '@@::++_O_U_T_P_U_T_F_I_L_E_S_++::@@' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
@@ -207,10 +259,69 @@ d
 cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
 sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
 cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
-
 rm -f /tmp/xsed.$$.outputfiles.txt
 rm -f /tmp/temp_html.$$.outputfiles.txt
 
+
+# ---- end result and runtime ----
+
+# export _must_exit_
+# export _exit_code_
+
+# echo '<br><br><div class="resultbox_@@::++RED_GREEN_all++::@@"><div class="float_left">@@::++RESULT_BOX++::@@</div>
+# <div class="float_right">@@::++RESULT_TIME++::@@</div></div>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+replace_with="/tmp/replace_with.$$.txt"
+rm -f "$replace_with"
+if [ $_exit_code_ -ne 0 ]; then
+	echo -n 'red' > "$replace_with"
+else
+	echo -n 'green' > "$replace_with"
+fi
+echo '/@@::++RED_GREEN_all++::@@/ {
+r '"${replace_with}"'
+d
+}' </dev/null >/tmp/xsed.$$.outputfiles.txt
+cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
+sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
+cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
+rm -f /tmp/xsed.$$.outputfiles.txt
+rm -f /tmp/temp_html.$$.outputfiles.txt
+rm -f "$replace_with"
+
+
+rm -f "$replace_with"
+if [ $_exit_code_ -ne 0 ]; then
+	echo -n '- ERRORS -' > "$replace_with"
+else
+	echo -n '* OK *' > "$replace_with"
+fi
+echo '/@@::++RESULT_BOX++::@@/ {
+r '"${replace_with}"'
+d
+}' </dev/null >/tmp/xsed.$$.outputfiles.txt
+cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
+sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
+cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
+rm -f /tmp/xsed.$$.outputfiles.txt
+rm -f /tmp/temp_html.$$.outputfiles.txt
+rm -f "$replace_with"
+
+
+rm -f "$replace_with"
+echo -n '[00:00:00]' > "$replace_with"
+echo '/@@::++RESULT_TIME++::@@/ {
+r '"${replace_with}"'
+d
+}' </dev/null >/tmp/xsed.$$.outputfiles.txt
+cp "$CIRCLE_ARTIFACTS"/index.html /tmp/temp_html.$$.outputfiles.txt
+sed -f /tmp/xsed.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html </dev/null >/tmp/temp_html.$$.outputfiles.txt
+cp /tmp/temp_html.$$.outputfiles.txt "$CIRCLE_ARTIFACTS"/index.html
+rm -f /tmp/xsed.$$.outputfiles.txt
+rm -f /tmp/temp_html.$$.outputfiles.txt
+rm -f "$replace_with"
+
+# ---- end result and runtime ----
 
 
 
@@ -357,11 +468,11 @@ cat "$tmpf" | while read _cmdfile; do
 			echo "================="
 
 			if [ $need_ex -eq 1 ]; then
-				clean_up
 				_must_exit_=1
 				_exit_code_=$excode
 				export _must_exit_
 				export _exit_code_
+				clean_up
 				exit2 $excode
 			else
 				set_test_failed
