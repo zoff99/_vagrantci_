@@ -221,14 +221,21 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 # --------- update index 2 ---------
 # --------- update index 2 ---------
 
+# apt-get install -m -q -y libncurses5:i386 >> /srv/dl/install.log 2>&1
+# res=$? ; if [ $res -ne 0 ];then exit 1;fi
+# apt-get install -m -q -y libstdc++6:i386 >> /srv/dl/install.log 2>&1
+# res=$? ; if [ $res -ne 0 ];then exit 1;fi
+# apt-get install -m -q -y libc6:i386 >> /srv/dl/install.log 2>&1
+# res=$? ; if [ $res -ne 0 ];then exit 1;fi
+# apt-get install -m -q -y libz-dev:i386 libz1:i386 >> /srv/dl/install.log 2>&1
+# res=$? ; if [ $res -ne 0 ];then exit 1;fi
+
 
 apt-get install -m -q -y gradle-2.10 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y g++ make git curl vim htop mc zip >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y subversion >> /srv/dl/install.log 2>&1
-res=$? ; if [ $res -ne 0 ];then exit 1;fi
-apt-get install -m -q -y libc6:i386 libncurses5:i386 libstdc++6:i386 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y imagemagick maven gradle >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
@@ -242,10 +249,11 @@ apt-get install -m -q -y mesa-utils ant iftop >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y libiconv-hook-dev gettext libsaxonb-java >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
-apt-get install -m -q -y libz-dev libz-dev:i386 libz1 libz1:i386 >> /srv/dl/install.log 2>&1
+apt-get install -m -q -y libz-dev libz1 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y oracle-java8-installer >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
+
 
 ## -- update the dpkg binary --
 apt-get install dpkg >> /srv/dl/install.log 2>&1
@@ -282,9 +290,10 @@ echo "install webserver..."
 apt-get install -m -q -y apache2 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
-if ! [ -L /var/www ]; then
+if ! [ -L /var/www/html ]; then
   rm -rf /var/www
-  ln -fs /www_srv /var/www
+  mkdir -p /var/www/html
+  ln -fs /www_srv /var/www/html
 fi
 
 END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
