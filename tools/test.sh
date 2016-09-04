@@ -161,7 +161,7 @@ code {
 
 html_template_cmd_head_1a='<details>
 <summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@
-<BR><div><pre class="grey"><code class="bash">'
+<div><pre class="grey"><code class="bash">'
 
 html_template_cmd_head_1b='</code></pre></div></summary>
 '
@@ -457,7 +457,7 @@ cat "$tmpf" | while read _cmdfile; do
 		if [ $excode -ne 0 ]; then
 			_red_green='red'
 		fi
-		echo "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
+		echo -n "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#${time_formatted}#" \
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
@@ -516,7 +516,7 @@ cat "$tmpf" | while read _cmdfile; do
 		echo $! >> "$pids"
 
 		_red_green='blue'
-		echo "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
+		echo -n "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#-:--:--#" \
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
