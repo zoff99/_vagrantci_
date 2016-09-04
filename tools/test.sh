@@ -208,7 +208,7 @@ echo '<details>
 <summary class="blue">&nbsp;circle.yml&nbsp;</summary>
 <p class="codebox"><code>' >> "$CIRCLE_ARTIFACTS"/index.html
 
-cat /home/ubuntu/"$__REPO_BASEDIR"/circle.yml | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+cat /home/ubuntu/"$CIRCLE_PROJECT_REPONAME"/circle.yml | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
 
 echo '</code><p>
 </details>
