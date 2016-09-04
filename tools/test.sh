@@ -43,9 +43,11 @@ rm -f "$pids"
 #	ls -al "$_cmdfile"
 #done
 
-html_template_001='<HTML>
+html_template_001='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<HTML>
 <head>
-<style>
+<style type="text/css">
 summary {
   font-size: large;
   font-family: "Lucida Console", Monaco, monospace;
@@ -71,6 +73,10 @@ summary.green {
 summary.blue {
   background-color: LightBlue;
   border: 2px dotted Black;
+}
+
+code {
+  white-space: pre;  
 }
 
 .codebox {
@@ -331,7 +337,7 @@ cat "$tmpf" | while read _cmdfile; do
 		# ------- log -------
 		rm -f "/tmp/xyz.txt"
 		cat "$_l2" | sed -e 's.#..g' | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' > /tmp/xyz.txt
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo -n "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		cat "/tmp/xyz.txt" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- log -------
@@ -387,7 +393,7 @@ cat "$tmpf" | while read _cmdfile; do
 		# echo "$html_template_cmd_command_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		# ------- commands -------
 
-		echo "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
+		echo -n "$html_template_cmd_log_1" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo '@@%%::'"$_l2"'@@%%::' >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_log_2" >> "$CIRCLE_ARTIFACTS"/index.html
 		echo "$html_template_cmd_head_2" >> "$CIRCLE_ARTIFACTS"/index.html
