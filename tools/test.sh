@@ -57,6 +57,10 @@ summary {
 	color:Black;
 }
 
+div.grey{
+	background-color: LightGrey;
+}
+
 summary.red{
 	background-color: Red;
 	border:2px dotted Black;
@@ -76,8 +80,12 @@ summary.blue{
 </head>
 '
 
-html_template_cmd_head_1='<details>
-<summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@</summary>
+html_template_cmd_head_1a='<details>
+<summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@
+<BR>
+<div class="grey">'
+
+html_template_cmd_head_1b='</div></summary>
 '
 
 html_template_cmd_command_1='
@@ -96,6 +104,7 @@ html_template_cmd_log_2='</pre>
 '
 
 html_template_cmd_head_2='</details>
+<BR>
 '
 
 html_template_099='</HTML>
@@ -292,10 +301,13 @@ cat "$tmpf" | while read _cmdfile; do
 		if [ $excode -ne 0 ]; then
 			_red_green='red'
 		fi
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
+		echo "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#${time_formatted}#" \
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
+
+		cat "$_c2" |head -4 | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_head_1b" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
@@ -348,10 +360,13 @@ cat "$tmpf" | while read _cmdfile; do
 		echo $! >> "$pids"
 
 		_red_green='blue'
-		echo "$html_template_cmd_head_1" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
+		echo "$html_template_cmd_head_1a" | sed -e "s#@@REDGREEN@@#${_red_green}#" \
 			| sed -e "s#@@TIME@@#-:--:--#" \
 			| sed -e "s#@@TITLE@@#${mainkey_tests}.${subkey_tests} ${_cmdfile}#" \
 			>> "$CIRCLE_ARTIFACTS"/index.html
+
+		cat "$_c2" |head -4 | sed -e 's#<#\&lt;#g' | sed -e 's#>#\&gt;#g' >> "$CIRCLE_ARTIFACTS"/index.html
+		echo "$html_template_cmd_head_1b" >> "$CIRCLE_ARTIFACTS"/index.html
 
 		# ------- commands -------
 		rm -f "/tmp/xyz.txt"
