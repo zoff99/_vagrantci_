@@ -107,9 +107,10 @@ fi
 echo "sync system time..."
 ntpq -p >> /srv/dl/install.log 2>&1
 service ntp stop >> /srv/dl/install.log 2>&1
-sleep 1
+sleep 3
 ntpdate pool.ntp.org >> /srv/dl/install.log 2>&1
 service ntp start >> /srv/dl/install.log 2>&1
+sleep 3
 ntpq -p >> /srv/dl/install.log 2>&1
 
 
