@@ -292,7 +292,7 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 if ! [ -L /var/www/html ]; then
   rm -rf /var/www
-  mkdir -p /var/www/html
+  mkdir -p /var/www
   ln -fs /www_srv /var/www/html
 fi
 
