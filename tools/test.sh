@@ -57,6 +57,7 @@ summary {
 
 div.grey {
   background-color: LightGrey;
+  font-size: normal;
   padding: 0.2cm 0.2cm 0.2cm 0.2cm;
 }
 
@@ -152,8 +153,8 @@ code {
 }
 </style>
 
-<link rel="stylesheet" href="/styles/railscasts.css">
-<script src="/styles/highlight.pack.js"></script>
+<link rel="stylesheet" href="../../styles/railscasts.css">
+<script src="../../styles/highlight.pack.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 </head>
 <BODY style="background-color:#eeeeee;">
