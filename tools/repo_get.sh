@@ -95,6 +95,8 @@ rm -Rf "$bdir"
 
 mkdir -p "$bdir"
 
+mkdir -p "$bdir"/general/artifacts
+
 mkdir -p "$bdir"/machine/timezone
 mkdir -p "$bdir"/machine/environment
 mkdir -p "$bdir"/machine/java
@@ -204,6 +206,37 @@ echo
 echo "$level_0_keys keys:"
 
 if [ $level_0_keys > 0 ]; then
+
+
+	cat /tmp/circle_yml.json | jq keys[] | grep 'general' > /dev/null 2> /dev/null
+	res=$?
+	if [ $res -eq 0 ]; then
+		# -------- general --------
+		echo " * general"
+		level_1_keys=`cat /tmp/circle_yml.json | jq '.general'| jq keys[] |wc -l 2>/dev/null|tr -d " "`
+
+		if [ $level_1_keys > 0 ]; then
+
+			cat /tmp/circle_yml.json | jq '.general'|jq keys[] | grep 'artifacts' > /dev/null 2> /dev/null
+			res=$?
+			if [ $res -eq 0 ]; then
+				echo "   * artifacts"
+
+				cat /tmp/circle_yml.json | jq '.general.artifacts' | jq keys[] | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
+					artefact_dir_=`cat /tmp/circle_yml.json | jq '.general.artifacts['"$_key"']' 2> /dev/null | tr -d '\r'| tr -d '\n'`
+					echo 'cd /home/ubuntu/"$CIRCLE_PROJECT_REPONAME"/' >> "$bdir"/general/artifacts/"$_key"_artefacts.txt
+					echo 'cp -av '"$artefact_dir_"' "$CIRCLE_ARTIFACTS"/' >> "$bdir"/general/artifacts/"$_key"_artefacts.txt
+				done
+			fi
+
+		fi
+		# -------- general --------
+	fi
+
+
+
+
+
 	cat /tmp/circle_yml.json | jq keys[] | grep 'machine' > /dev/null 2> /dev/null
 	res=$?
 	if [ $res -eq 0 ]; then

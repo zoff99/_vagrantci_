@@ -577,6 +577,15 @@ export _test_failed_=`cat /tmp/_test_failed_`
 #fi
 # ---------- save cache (only if no errors occured) ----------
 
+# ---------- save artefacts (only if no errors occured) ------
+export _test_failed_=`cat /tmp/_test_failed_`
+#if [ ${_test_failed_} -eq 0 ]; then
+	for i in `ls -1 "$bdir"/general/artifacts/*_artefacts.txt 2> /dev/null` ; do
+		bash "$i"
+	done
+#fi
+# ---------- save artefacts (only if no errors occured) ------
+
 
 clean_up
 
