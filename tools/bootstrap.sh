@@ -464,10 +464,17 @@ if [ $have_apis -eq 0 ]; then
 	###################### SDK ######################
 	echo y | android update sdk --no-ui --all --filter platform-tools >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter tools >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-22.0.0 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-22.0.1 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-22.0.2 >> /srv/dl/install.log 2>&1
+
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.0 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.2 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.3 >> /srv/dl/install.log 2>&1
+
+	echo y | android update sdk --no-ui --all --filter build-tools-24.0.0 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-24.0.1 >> /srv/dl/install.log 2>&1
 
 	echo y | android update sdk --no-ui --all --filter android-4 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-8 >> /srv/dl/install.log 2>&1
