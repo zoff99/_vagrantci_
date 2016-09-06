@@ -275,6 +275,10 @@ update-locale LANG=en_US.UTF-8 LC_MESSAGES=POSIX >> /srv/dl/install.log 2>&1
 # locale-gen en_US.UTF-8 >> /srv/dl/install.log 2>&1
 dpkg-reconfigure locales >> /srv/dl/install.log 2>&1
 
+# --- instal i386 runtime ---
+apt-get install lib32z1 lib32ncurses5 lib32bz2-1.0 libstdc++6:i386 libc6:i386 >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
+# --- instal i386 runtime ---
 
 END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
 
