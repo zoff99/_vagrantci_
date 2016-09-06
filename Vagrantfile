@@ -20,9 +20,24 @@
 
 ENV["LC_ALL"] = "en_US.UTF-8"
 
+# Vagrant.require_version ">= 1.8.0", "< 1.9.0"
 Vagrant.configure("2") do |config|
-  config.vm.box = "hashicorp/precise64"
-  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+
+#
+# -------------- Hashicorp 12.04 LTS --------------
+#  config.vm.box = "hashicorp/precise64"
+#  config.vm.box_url = "http://files.vagrantup.com/precise64.box"
+# ---------------------------------------
+#
+# -------------- Ubuntu 14.04 LTS --------------
+  config.vm.box = "ubuntu/trusty64"
+# ---------------------------------------
+#
+# -------------- Bento 14.04 LTS --------------
+# https://atlas.hashicorp.com/bento/boxes/ubuntu-14.04/versions/2.2.9
+  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box_version = " =2.2.9"
+# ---------------------------------------
 
 #  this does not work on windows -------
 #  config.vm.hostname = "circleci.box"
@@ -37,6 +52,8 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
   end
+
+   config.vm.box_check_update = false
 
 #  config.ssh.private_key_path = "./.vagrant/i_prv_key"
   config.ssh.username = "vagrant"

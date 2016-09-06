@@ -94,8 +94,10 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 # --------- update index 1 ---------
 
 
-
-
+apt-get install -m -q -y software-properties-common >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
+apt-get install -m -q -y ntp >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y bc >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
@@ -164,10 +166,10 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 
 # add repos ------------------
-echo 'deb http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
-echo 'deb-src http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
-echo 'deb http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
-echo 'deb-src http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
+#echo 'deb http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
+#echo 'deb-src http://archive.canonical.com/ubuntu precise partner' >> /etc/apt/sources.list
+#echo 'deb http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
+#echo 'deb-src http://extras.ubuntu.com/ubuntu precise main' >> /etc/apt/sources.list
 apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192 >> /srv/dl/install.log 2>&1
 # add repos ------------------
 
@@ -176,16 +178,16 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-key 16126D3A3E5C1192 >> /srv
 mkdir -p /etc/apt/sources.list.d/ >> /srv/dl/install.log 2>&1
 touch /etc/apt/sources.list.d/vagrantci.list >> /srv/dl/install.log 2>&1
 
-echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://security.ubuntu.com/ubuntu precise-security main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb-src http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://archive.ubuntu.com/ubuntu trusty main" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://archive.ubuntu.com/ubuntu/ trusty-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://archive.ubuntu.com/ubuntu/ precise-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
-echo "deb http://packages.couchbase.com/preview/ubuntu lucid lucid/main" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu precise main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu precise-updates main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://security.ubuntu.com/ubuntu precise-security main restricted universe multiverse" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb-src http://ppa.launchpad.net/ubuntu-toolchain-r/test/ubuntu precise main" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu trusty main" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu trusty-updates main" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu/ trusty-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://archive.ubuntu.com/ubuntu/ precise-backports main universe" >> /etc/apt/sources.list.d/vagrantci.list
+#echo "deb http://packages.couchbase.com/preview/ubuntu lucid lucid/main" >> /etc/apt/sources.list.d/vagrantci.list
 echo "deb http://debian.datastax.com/community stable main" >> /etc/apt/sources.list.d/vagrantci.list
 
 apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 1E9377A2BA9EF27F >> /srv/dl/install.log 2>&1
@@ -232,20 +234,36 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 # res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 
-apt-get install -m -q -y gradle-2.10 >> /srv/dl/install.log 2>&1
+apt-get install -m -q -y gradle-2.14 >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
+gradle -v  >> /srv/dl/install.log 2>&1
+
+# apt-get install -m -q -y gradle-2.10 >> /srv/dl/install.log 2>&1
+# res=$? ; if [ $res -ne 0 ];then exit 1;fi
+
 apt-get install -m -q -y g++ make git curl vim htop mc zip >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y subversion >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
-apt-get install -m -q -y imagemagick maven gradle >> /srv/dl/install.log 2>&1
+apt-get install -m -q -y imagemagick maven >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y wget unzip openjdk-7-jdk >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y xvfb xdotool telnet x11-utils xvkbd >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
-apt-get install -m -q -y xterm jq libyaml-ruby ruby-json >> /srv/dl/install.log 2>&1
+
+aptitude search libyaml-perl >> /srv/dl/install.log 2>&1
+aptitude search ruby-json >> /srv/dl/install.log 2>&1
+aptitude search jq >> /srv/dl/install.log 2>&1
+
+apt-get install -m -q -y libyaml-perl >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
+apt-get install -m -q -y ruby-json >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
+apt-get install -m -q -y xterm jq >> /srv/dl/install.log 2>&1
+res=$? ; if [ $res -ne 0 ];then exit 1;fi
+
+
 apt-get install -m -q -y mesa-utils ant iftop >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 apt-get install -m -q -y libiconv-hook-dev gettext libsaxonb-java >> /srv/dl/install.log 2>&1
@@ -471,7 +489,6 @@ if [ $have_apis -eq 0 ]; then
 	echo y | android update sdk --no-ui --all --filter tools >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-22.0.0 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-22.0.1 >> /srv/dl/install.log 2>&1
-	echo y | android update sdk --no-ui --all --filter build-tools-22.0.2 >> /srv/dl/install.log 2>&1
 
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.0 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-23.0.1 >> /srv/dl/install.log 2>&1
@@ -511,9 +528,6 @@ fi
 # writeable by all, so update as normal user is possible
 cd /usr/local/ && chmod -R a+rxw android-sdk-linux >> /srv/dl/install.log 2>&1
 
-
-cp /srv/tools/fb-adb /usr/bin/fb-adb >> /srv/dl/install.log 2>&1
-chmod a+rx /usr/bin/fb-adb >> /srv/dl/install.log 2>&1
 
 END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
 
