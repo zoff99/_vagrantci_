@@ -47,6 +47,7 @@ html_template_001='<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN
 "http://www.w3.org/TR/html4/loose.dtd">
 <HTML>
 <head>
+<meta charset="UTF-8">
 <style type="text/css">
 summary {
   font-size: large;
