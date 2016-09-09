@@ -19,6 +19,7 @@
 #
 
 status_file='./dl/vm_setup_ready.txt'
+busy_file='./dl/vm_ci_running.txt'
 
 
 vagrantci__buf='
@@ -63,6 +64,16 @@ else
                 exit 1
         else
                 if [ "$1""x" == "runx" ]; then
+
+			if [ -e "$busy_file" ]; then
+                                echo "$vagrantci__header"
+                                echo " ** VM running / busy ** "
+		                echo "$vagrantci__footer"
+                		exit 1
+			fi
+
+			touch "$busy_file"
+
                         vm_setup_ready=0
                         if [ -d ./dl ]; then
                                 if [ -e "$status_file" ]; then
@@ -102,6 +113,8 @@ else
                                         vagrant halt --force </dev/null
                                         echo "$vagrantci__footer"
 
+					rm -f "$busy_file"
+
                                         exit 1
                                 fi
 
@@ -117,6 +130,8 @@ else
                                 echo " ** CI run ** "
                                 echo ""
                                 vagrant up --provision </dev/null
+				rm -f "$busy_file"
+
                                 echo "$vagrantci__footer"
                         else
                                 echo "$vagrantci__header"
@@ -156,7 +171,13 @@ else
 				fi
 
                                 echo "$vagrantci__footer"
+
+				rm -f "$busy_file"
+
                         fi
+
+			rm -f "$busy_file"
+
                 elif [ "$1""x" == "destroyx" ]; then
                         echo "$vagrantci__header"
                         read -p " really destroy VM? [Y/n]:" resp
@@ -168,6 +189,9 @@ else
                                 printf 'Y\n'|vagrant destroy --force
                                 rm -f "$status_file"
                         fi
+
+			rm -f "$busy_file"
+
                         echo "$vagrantci__footer"
                 else
                         echo "$vagrantci__header"
