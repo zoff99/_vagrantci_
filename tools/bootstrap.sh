@@ -30,9 +30,6 @@ fi
 #
 #### check what run we should do ####
 
-
-START_ALL=$(date +%s)
-
 START=$(date +%s)
 
 if [ $vm_setup_ready_flag -eq 0 ]; then
@@ -114,6 +111,9 @@ ntpdate pool.ntp.org >> /srv/dl/install.log 2>&1
 service ntp start >> /srv/dl/install.log 2>&1
 sleep 3
 ntpq -p >> /srv/dl/install.log 2>&1
+
+
+START_ALL=$(date +%s)
 
 
 #----------
