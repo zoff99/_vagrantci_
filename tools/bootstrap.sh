@@ -30,7 +30,6 @@ fi
 #
 #### check what run we should do ####
 
-START=$(date +%s)
 
 if [ $vm_setup_ready_flag -eq 0 ]; then
 	echo ""
@@ -57,19 +56,22 @@ function sync_install_log_()
 # ---------------------------------------
 
 
-
 if [ $vm_setup_ready_flag -eq 0 ]; then
+
+START=$(date +%s)
 
 # circleCI specific ---
 groupadd -g 99000 ubuntu >> /srv/dl/install.log 2>&1
 useradd -m -u 88000 -g 99000 -s /bin/bash -d /home/ubuntu ubuntu >> /srv/dl/install.log 2>&1
 echo 'ubuntu ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-chown ubuntu:ubuntu /home/ubuntu >> /srv/dl/install.log 2>&1
 usermod -G vagrant ubuntu >> /srv/dl/install.log 2>&1
 
 END=$(date +%s) ; echo $((END-START)) | awk '{printf "%d:%02d:%02d\n", $1/3600, ($1/60)%60, $1%60}'
 
 fi
+
+chown ubuntu:ubuntu /home/ubuntu >> /srv/dl/install.log 2>&1
+
 
 
 export DEBIAN_FRONTEND=noninteractive
@@ -114,7 +116,6 @@ ntpq -p >> /srv/dl/install.log 2>&1
 
 
 START_ALL=$(date +%s)
-
 
 #----------
 # build num

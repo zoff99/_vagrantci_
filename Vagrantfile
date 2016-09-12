@@ -47,7 +47,9 @@ Vagrant.configure("2") do |config|
   config.vm.network :forwarded_port, guest: 22, host: 52999, id: "ssh", auto_correct: true
 #  cXonfig.vm.network :private_network, ip: "192.168.77.33"
 
+
   config.vm.provider :virtualbox do |vb|
+    vb.linked_clone = true if Vagrant::VERSION =~ /^1.8/
     vb.customize ["modifyvm", :id, "--memory", "4096"]
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--nictype1", "virtio"]
@@ -68,6 +70,43 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder ".", "/srv"
   config.vm.synced_folder "..", "/code_base"
   config.vm.synced_folder "www/", "/www_srv", create: true
+
+
+
+
+
+
+  VAGRANT_ROOT = File.dirname(File.expand_path(__FILE__))
+  file_to_disk = File.join(VAGRANT_ROOT, 'expand.vdi')
+  config.vm.provision :shell, :inline => "echo ARG=" + ARGV[0]
+
+  if ARGV[0] == "up"
+      config.vm.provision :shell, :inline => "echo UP1"
+      if File.exist?(file_to_disk)
+        config.vm.provision :shell, :inline => "echo UNMOUNT"
+        config.vm.provision :shell, :inline => "umount -f /dev/sdb1"
+      end
+  end
+
+  config.vm.provider :virtualbox do |vb|
+    if ARGV[0] == "up" && ! File.exist?(file_to_disk)
+      config.vm.provision :shell, :inline => "echo UP2"
+      vb.customize ['createhd', '--filename', file_to_disk, '--format', 'VDI', '--size', 80 * 1024]
+    end
+    vb.customize ['storageattach', :id, '--storagectl', 'SATA Controller', '--port', 1, '--device', 0, '--type', 'hdd', '--medium', file_to_disk]
+  end
+
+
+
+
+
+  if ARGV[0] == "up"
+    # partition the disk
+    config.vm.provision :shell, :inline => "echo PART"
+    config.vm.provision :shell, path: "tools/extra_disk.sh"
+  end
+
+
 
   # Setup
   config.vm.provision :shell, :inline => "touch .hushlogin"

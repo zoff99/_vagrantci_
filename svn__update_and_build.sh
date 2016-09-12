@@ -3,8 +3,8 @@
 busy_file='./dl/vm_ci_running.txt'
 
 if [ -e "$busy_file" ]; then
-        # echo " ** VM running / busy ** "
-        exit 0
+	# echo " ** VM running / busy ** "
+	exit 0
 fi
 
 new=`cd .. && svn info -r HEAD 2>/dev/null | grep -i "Last Changed Rev" 2>/dev/null | cut -d':' -f2 | tr -d " "`
@@ -20,11 +20,12 @@ if [ "$old""x" != "$new""x" ]; then
 	echo "============================="
 	echo ""
 	svn up .. && bash vagrantci.sh run
-else
-	:
+# else
+	# :
 	# echo ""
 	# echo "============================="
 	# echo "no update"
 	# echo "============================="
 	# echo ""
 fi
+
