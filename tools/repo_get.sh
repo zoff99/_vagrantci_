@@ -326,7 +326,7 @@ if [ $level_0_keys > 0 ]; then
 						echo "       ""$_cache_data_file"
 
 						b_key=`basename "$_key"`
-						echo 'cd '"$_key"'/../ && tar -cvf '"$ci_cache_datadir"'/'"$_cache_data_file"'.tar'' '"$b_key" >> "$bdir"/dependencies/cache_directories/0_new_dirs.txt
+						echo 'cd '"$_key"'/../ && tar -cvf '"$_cache_data_file"' '"$b_key" >> "$bdir"/dependencies/cache_directories/0_new_dirs.txt
 
 						# mark found dir -------
 						cat "$ci_cache_dirs2" 2> /dev/null | grep -v '^'"$_key"':' > "$ci_cache_dirs3" 2>/dev/null
