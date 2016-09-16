@@ -29,7 +29,7 @@ if [ `ls -1 "$vm_send_email_file" 2>/dev/null`"x" != "x" ]; then
 
 	if [ `ls -1 "$vm_email_send_to_file" 2>/dev/null`"x" != "x" ]; then
 		email_to=`cat "$vm_email_send_to_file" | tr -d '\r'| tr -d '\n'`
-		mail -a "Content-type: text/html" -s "VagrantCI Build" "$email_to" < "$email_file"
+		mail -a "Content-type: text/html" -a "From: $email_to" -s "VagrantCI Build" "$email_to" < "$email_file"
 	fi
 
 	rm -f "$vm_send_email_file"

@@ -11,3 +11,4 @@ lsof
 nano
 vim
 mtools
+mailutils
