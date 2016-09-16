@@ -315,7 +315,7 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 
 
 _test_failed_=`cat /tmp/_test_failed_`
-if [ ${_test_failed_} -eq 0 ]; then
+if [ ${_test_failed_} -ne 0 ]; then
 	_exit_code_=1
 fi
 
