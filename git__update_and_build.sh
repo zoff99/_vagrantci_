@@ -14,7 +14,7 @@ fi
 cd .. && git remote -v update > /dev/null 2> /dev/null;
 git remote -v update > /dev/null 2> /dev/null;
 git remote -v update > /dev/null 2> /dev/null;
-git status 2>&1 | grep 'Your branch is up-to-date'
+git status 2>&1 | grep 'Your branch is up-to-date' > /dev/null 2> /dev/null
 
 need_update=$?
 
