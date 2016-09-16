@@ -114,4 +114,7 @@ Vagrant.configure("2") do |config|
   # configure the machine
   config.vm.provision :shell, path: "tools/bootstrap.sh"
 
+  # check if we need to send email
+  config.vm.provision :shell, path: "tools/send_email.sh"
+
 end

@@ -21,6 +21,7 @@
 
 #### check what run we should do ####
 #
+vm_send_email_file="/srv/dl/vm_send_email.txt"
 vm_setup_ready_file="/srv/dl/vm_setup_ready.txt"
 
 vm_setup_ready_flag=0
@@ -633,6 +634,9 @@ if [ $vm_setup_ready_flag -eq 0 ]; then
 	sleep 15
 fi
 
+if [ $vm_setup_ready_flag -ne 0 ]; then
+	echo "$CIRCLE_ARTIFACTS""/""index.html" > "$vm_send_email_file"
+fi
 
 echo "...ready"
 END_ALL=$(date +%s); echo $((END_ALL-START_ALL)) | awk '{printf "%d:%02d:%02d", $1/3600, ($1/60)%60, $1%60}'
