@@ -34,3 +34,5 @@ if [ `ls -1 "$vm_send_email_file" 2>/dev/null`"x" != "x" ]; then
 
 	rm -f "$vm_send_email_file"
 fi
+
+exit 0
