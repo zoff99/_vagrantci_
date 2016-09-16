@@ -475,7 +475,7 @@ printf '. /etc/profile ; mkdir -p $CIRCLE_ARTIFACTS \n' | su - ubuntu >> /srv/dl
 
 ###### mail #######
 mail_config='/etc/postfix/main.cf'
-vm_email_relay="/srv/dl/vm_email_relay.txt"
+vm_email_relay="/srv/tools/email_relay.txt"
 
 if [ `ls -1 "$vm_email_relay" 2>/dev/null`"x" != "x" ]; then
 	_relay_host_=`cat "$vm_email_relay" | tr -d '\r'| tr -d '\n'`

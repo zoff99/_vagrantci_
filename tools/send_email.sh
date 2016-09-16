@@ -22,7 +22,7 @@
 #### check what run we should do ####
 #
 vm_send_email_file="/srv/dl/vm_send_email.txt"
-vm_email_send_to_file="/srv/dl/emailto.txt"
+vm_email_send_to_file="/srv/tools/emailto.txt"
 
 if [ `ls -1 "$vm_send_email_file" 2>/dev/null`"x" != "x" ]; then
 	email_file=`cat "$vm_send_email_file" | tr -d '\r'| tr -d '\n'`
