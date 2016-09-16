@@ -38,14 +38,14 @@ if [ `ls -1d "/code_base/.git" 2>/dev/null`"x" != "x" ]; then
 	#----------
 	#----------
 	__REPO_USER="user001"
-	if [ "`/srv/dl/repouser.txt`""x" != "x" ]; then
-		__REPO_USER="`/srv/dl/repouser.txt`"
+	if [ "`/srv/tools/repouser.txt`""x" != "x" ]; then
+		__REPO_USER="`/srv/tools/repouser.txt`"
 	fi
 	#----------
 	#----------
 	__REPO_PASS=""
-	if [ "`/srv/dl/repopass.txt`""x" != "x" ]; then
-		__REPO_PASS="`/srv/dl/repopass.txt`"
+	if [ "`/srv/tools/repopass.txt`""x" != "x" ]; then
+		__REPO_PASS="`/srv/tools/repopass.txt`"
 	fi
 	#----------
 	#----------
@@ -66,14 +66,14 @@ else
 	#----------
 	#----------
 	__REPO_USER="user001"
-	if [ "`cat /srv/dl/repouser.txt`""x" != "x" ]; then
-		__REPO_USER="`cat /srv/dl/repouser.txt`"
+	if [ "`cat /srv/tools/repouser.txt`""x" != "x" ]; then
+		__REPO_USER="`cat /srv/tools/repouser.txt`"
 	fi
 	#----------
 	#----------
 	__REPO_PASS=""
-	if [ "`cat /srv/dl/repopass.txt`""x" != "x" ]; then
-		__REPO_PASS="`cat /srv/dl/repopass.txt`"
+	if [ "`cat /srv/tools/repopass.txt`""x" != "x" ]; then
+		__REPO_PASS="`cat /srv/tools/repopass.txt`"
 	fi
 	#----------
 	#----------
