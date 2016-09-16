@@ -155,12 +155,25 @@ code {
 }
 </style>
 
-<link rel="stylesheet" href="../../styles/railscasts.css">
-<script src="../../styles/highlight.pack.js"></script>
+<style>'
+
+
+html_template_001a='</style>
+<script>'
+
+html_template_001b='</script>
+
+<!--<link rel="stylesheet" href="../../styles/railscasts.css">-->
+<!--<script src="../../styles/highlight.pack.js"></script>-->
+
 <script>hljs.initHighlightingOnLoad();</script>
+
 </head>
 <BODY style="background-color:#eeeeee;">
 '
+
+
+
 
 html_template_cmd_head_1a='<details>
 <summary class="@@REDGREEN@@">[@@TIME@@]&nbsp;@@TITLE@@
@@ -190,6 +203,10 @@ html_template_output_files_3='</a><BR>'
 
 rm -f "$CIRCLE_ARTIFACTS"/index.html
 echo "$html_template_001" >> "$CIRCLE_ARTIFACTS"/index.html
+cat /www_srv/styles/railscasts.css >> "$CIRCLE_ARTIFACTS"/index.html
+echo "$html_template_001a" >> "$CIRCLE_ARTIFACTS"/index.html
+cat /www_srv/styles/highlight.pack.js >> "$CIRCLE_ARTIFACTS"/index.html
+echo "$html_template_001b" >> "$CIRCLE_ARTIFACTS"/index.html
 
 echo '<br><div align="center" class="head_line">VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #'"$CIRCLE_BUILD_NUM"'</div><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '<a class="repo_url" href="' >> "$CIRCLE_ARTIFACTS"/index.html
@@ -296,8 +313,11 @@ rm -f /tmp/temp_html.$$.outputfiles.txt
 # export _must_exit_
 # export _exit_code_
 
-# echo '<br><br><div class="resultbox_@@::++RED_GREEN_all++::@@"><div class="float_left">@@::++RESULT_BOX++::@@</div>
-# <div class="float_right">@@::++RESULT_TIME++::@@</div></div>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+_test_failed_=`cat /tmp/_test_failed_`
+if [ ${_test_failed_} -eq 0 ]; then
+	_exit_code_=1
+fi
 
 replace_with="/tmp/replace_with.$$.txt"
 rm -f "$replace_with"
