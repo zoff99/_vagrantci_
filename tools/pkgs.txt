@@ -3,6 +3,7 @@ pkg-config
 scala
 curl
 npm
+sysstat
 firefox
 python-pip
 libperl-dev
