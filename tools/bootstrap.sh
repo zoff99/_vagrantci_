@@ -477,12 +477,15 @@ printf '. /etc/profile ; mkdir -p $CIRCLE_ARTIFACTS \n' | su - ubuntu >> /srv/dl
 mail_config='/etc/postfix/main.cf'
 vm_email_relay="/srv/tools/email_relay.txt"
 
+postconf -e mailbox_size_limit=0
+postconf -e message_size_limit=0
+
 if [ `ls -1 "$vm_email_relay" 2>/dev/null`"x" != "x" ]; then
 	_relay_host_=`cat "$vm_email_relay" | tr -d '\r'| tr -d '\n'`
 	sed -i -e 's#relayhost =.*#relayhost = '"$_relay_host_"'#g' "$mail_config"
-
-	service postfix restart
 fi
+
+service postfix restart
 ###### mail #######
 
 
