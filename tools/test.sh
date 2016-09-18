@@ -219,7 +219,7 @@ echo "$html_template_001b" >> "$CIRCLE_ARTIFACTS"/index.html
 echo '<br><div align="center" class="head_line">VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #'"$CIRCLE_BUILD_NUM"'</div><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '<a class="repo_url" href="' >> "$CIRCLE_ARTIFACTS"/index.html
 echo "$CIRCLE_REPOSITORY_URL" >> "$CIRCLE_ARTIFACTS"/index.html
-echo '">repository URL</a><br>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '">repository URL</a><br><br><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
 echo '<div class="repo_commit">Commit: '"$CIRCLE_SHA1"'</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
