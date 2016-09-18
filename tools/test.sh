@@ -135,6 +135,14 @@ code {
   margin: 0px 0.2cm 0.2cm 0.2cm;
 }
 
+.repo_commit {
+  border: 4px solid lightgrey;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: normal;
+  padding: 0.4cm 0.4cm 0.4cm 0.4cm;
+  margin: 0px 0.2cm 0.2cm 0.2cm;
+}
+
 .repo_url {
   border: 4px solid lightgrey;
   font-family: "Lucida Console", Monaco, monospace;
@@ -211,7 +219,9 @@ echo "$html_template_001b" >> "$CIRCLE_ARTIFACTS"/index.html
 echo '<br><div align="center" class="head_line">VagrantCI Build:'"$CIRCLE_PROJECT_REPONAME"' #'"$CIRCLE_BUILD_NUM"'</div><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 echo '<a class="repo_url" href="' >> "$CIRCLE_ARTIFACTS"/index.html
 echo "$CIRCLE_REPOSITORY_URL" >> "$CIRCLE_ARTIFACTS"/index.html
-echo '">repository URL</a><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
+echo '">repository URL</a><br>' >> "$CIRCLE_ARTIFACTS"/index.html
+
+echo '<div class="repo_commit">Commit: '"$CIRCLE_SHA1"'</div><br><br>' >> "$CIRCLE_ARTIFACTS"/index.html
 
 echo '<br><br><div class="
 @@::++RED_GREEN_all++::@@
