@@ -517,17 +517,24 @@ if [ $have_apis -eq 0 ]; then
 
 	echo y | android update sdk --no-ui --all --filter build-tools-24.0.0 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter build-tools-24.0.1 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-24.0.2 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter build-tools-24.0.3 >> /srv/dl/install.log 2>&1
 
 	echo y | android update sdk --no-ui --all --filter android-4 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter android-7 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-8 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-9 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-10 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter android-14 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-15 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter android-19 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-21 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-22 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-23 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter android-24 >> /srv/dl/install.log 2>&1
 
+	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-14 >> /srv/dl/install.log 2>&1
+	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-19 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-21 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-22 >> /srv/dl/install.log 2>&1
 	echo y | android update sdk --no-ui --all --filter sys-img-armeabi-v7a-android-23 >> /srv/dl/install.log 2>&1
