@@ -13,3 +13,4 @@ nano
 vim
 mtools
 mailutils
+cmake
