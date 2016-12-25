@@ -69,6 +69,13 @@ else
 fi
 
 
+# override circle.yml ----------
+if [ `ls -1 "/srv/tools/ci_override_circle_yml.txt" 2>/dev/null`"x" != "x" ]; then
+	printf '. /tmp/_git_vars.sh \n pwd \n ls -al \n cd $__REPO_BASEDIR \n cp -av /code_base/circle.yml ./circle.yml \n pwd \n ls -al \n' | su - ubuntu
+fi
+# override circle.yml ----------
+
+
 function yaml2json()
 {
     ruby -ryaml -rjson -e \
