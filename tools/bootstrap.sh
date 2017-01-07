@@ -80,6 +80,14 @@ export DEBIAN_FRONTEND=noninteractive
 
 if [ $vm_setup_ready_flag -eq 0 ]; then
 
+
+echo "alias for quick env change..."
+
+cat <<EOM >>/home/vagrant/.bashrc
+alias 'u'="sudo -H -u ubuntu bash -c '. /tmp/.ci_rc;bash'"
+EOM
+
+
 START=$(date +%s)
 echo "update package list..."
 
