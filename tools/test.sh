@@ -597,6 +597,12 @@ bash "$bdir"/dependencies/cache_directories/1_all_dirs.txt
 run_test_group "dependencies" "pre" "ex_yes"
 sync_and_check_exit
 
+run_test_group "compile" "pre" "ex_yes"
+sync_and_check_exit
+
+run_test_group "compile" "override" "ex_yes"
+sync_and_check_exit
+
 run_test_group "test" "pre" "ex_yes"
 sync_and_check_exit
 
