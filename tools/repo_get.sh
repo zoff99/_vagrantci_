@@ -111,6 +111,9 @@ mkdir -p "$bdir"/machine/java
 mkdir -p "$bdir"/dependencies/cache_directories
 mkdir -p "$bdir"/dependencies/pre
 
+mkdir -p "$bdir"/compile/pre
+mkdir -p "$bdir"/compile/override
+
 mkdir -p "$bdir"/test/pre
 mkdir -p "$bdir"/test/override
 ################## dirs ##################
@@ -381,6 +384,32 @@ if [ $level_0_keys > 0 ]; then
 		fi
 		# -------- dependencies --------
 	fi
+
+	cat /tmp/circle_yml.json | jq keys[] | grep 'compile' > /dev/null 2> /dev/null
+	res=$?
+	if [ $res -eq 0 ]; then
+		# -------- compile --------
+		echo " * compile"
+
+		level_1_keys=`cat /tmp/circle_yml.json | jq '.compile'| jq keys[] |wc -l 2>/dev/null|tr -d " "`
+
+		if [ $level_1_keys > 0 ]; then
+
+			export mainkey='compile'
+			export subkey='pre'
+			process_subkey
+			remove_specials_from_cmd_file "$bdir""/compile/pre/"
+
+			export mainkey='compile'
+			export subkey='override'
+			process_subkey
+			remove_specials_from_cmd_file "$bdir""/compile/override/"
+
+
+		fi
+		# -------- compile --------
+	fi
+
 
 	cat /tmp/circle_yml.json | jq keys[] | grep 'test' > /dev/null 2> /dev/null
 	res=$?
