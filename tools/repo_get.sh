@@ -142,7 +142,9 @@ ci_rc="/tmp/.ci_rc"
 rm -f "$ci_rc"
 touch "$ci_rc"
 
-
+cp -v "/srv/tools/jq" "/tmp/jq"
+export jq2="/tmp/jq"
+chmod a+rx "$jq2"
 
 
 function process_subkey()
@@ -280,7 +282,7 @@ if [ $level_0_keys > 0 ]; then
 			if [ $res -eq 0 ]; then
 				echo "   * environment"
 
-				cat /tmp/circle_yml.json | jq '.machine.environment' | jq keys_unsorted[] | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
+				cat /tmp/circle_yml.json | jq '.machine.environment' | $jq2 keys_unsorted[] | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
 					echo -n "$_key"'=' >> "$ci_rc"
 					cat /tmp/circle_yml.json | jq '.machine.environment.'"$_key" >> "$ci_rc"
 					echo 'export '"$_key" >> "$ci_rc"
