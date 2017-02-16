@@ -282,9 +282,9 @@ if [ $level_0_keys > 0 ]; then
 			if [ $res -eq 0 ]; then
 				echo "   * environment"
 
-				cat /tmp/circle_yml.json | jq '.machine.environment' | $jq2 keys_unsorted[] | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
+				cat /tmp/circle_yml.json | $jq2 '.machine.environment' | $jq2 keys_unsorted[] | sed -e 's#^"##' | sed -e 's#"$##' | while read _key ; do
 					echo -n "$_key"'=' >> "$ci_rc"
-					cat /tmp/circle_yml.json | jq '.machine.environment.'"$_key" >> "$ci_rc"
+					cat /tmp/circle_yml.json | $jq2 '.machine.environment.'"$_key" >> "$ci_rc"
 					echo 'export '"$_key" >> "$ci_rc"
 				done
 			fi
