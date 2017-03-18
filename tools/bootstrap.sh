@@ -244,7 +244,7 @@ res=$? ; if [ $res -ne 0 ];then exit 1;fi
 # res=$? ; if [ $res -ne 0 ];then exit 1;fi
 
 
-apt-get install -m -q -y gradle-2.14 >> /srv/dl/install.log 2>&1
+apt-get install -m -q -y gradle >> /srv/dl/install.log 2>&1
 res=$? ; if [ $res -ne 0 ];then exit 1;fi
 gradle -v  >> /srv/dl/install.log 2>&1
 
