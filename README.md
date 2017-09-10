@@ -24,6 +24,7 @@ VagrantCI is a [Continuous integration System](https://en.wikipedia.org/wiki/Con
 ### Installation (on Ubuntu)
 - install requirements:
 <pre>apt-get install virtualbox vagrant git</pre>
+**Note: you need vagrant version 1.8.x !!**
 - create a dummy user that only has access to it's own homedir
 - change to that dummy user
 - clone repository you want to run in your CI machine:
